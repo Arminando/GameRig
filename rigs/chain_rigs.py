@@ -47,23 +47,25 @@ class SimpleChainRig(SimpleChainRig):
     def make_deform_bone(self, i , org):
         # Preparation for making a single deformation hierarchy
         # Enables easy finding of deformation bone to parent to in parent_deform_chain
+        # TODO make this cleaner and easily applicable to all rigs
         name = self.copy_bone(org, make_derived_name(org, 'def'), parent=True, bbone=True)
-        self.obj.pose.bones[org]['def_bone'] = name
+        self.obj.pose.bones[org].rigify_associated_def = name
         if self.bbone_segments:
             self.get_bone(name).bbone_segments = self.bbone_segments
         return name
 
     @stage.parent_bones
     def parent_deform_chain(self):
-        super().parent_deform_chain()
+        self.parent_bone_chain(self.bones.deform, use_connect=False)
 
         # This puts the deformation bones into a single hierarchy
         # TODO make this cleaner and easily applicable to all rigs
-        parent_org = self.get_bone_parent(self.bones.deform[0])
-        if parent_org:
-            parents_def_bone = self.obj.pose.bones[parent_org]['def_bone']        
+        def_bone = self.bones.deform[0]
+        parent_bone = self.get_bone_parent(def_bone)
+        if parent_bone:
+            parents_def_bone = self.obj.pose.bones[parent_bone].rigify_associated_def
             if parents_def_bone:
-                self.set_bone_parent(self.bones.deform[0], parents_def_bone)
+                self.set_bone_parent(def_bone, parents_def_bone)
 
 
     def rig_deform_bone(self, i, deform, org):
