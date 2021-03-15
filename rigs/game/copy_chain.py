@@ -1,9 +1,13 @@
 import bpy
 
+from itertools import count
+
 from ..chain_rigs import SimpleChainRig
 from rigify.base_rig import stage
 from rigify.rigs.basic.copy_chain import Rig as copy_chain
 from rigify.rigs.basic.copy_chain import create_sample as orig_create_sample
+from rigify.utils.widgets import layout_widget_dropdown, create_registered_widget
+from rigify.utils.widgets_basic import create_bone_widget
 
 class Rig(SimpleChainRig, copy_chain):
     """ A "copy_chain" rig.  All it does is duplicate the original bone chain
@@ -21,6 +25,16 @@ class Rig(SimpleChainRig, copy_chain):
     ##############################
     # Control chain
 
+    @stage.generate_widgets
+    def generate_widgets(self):
+        if self.make_controls:
+            # Create control widget
+            for args in zip(count(0), self.bones.ctrl.fk):
+                self.make_control_widget(*args)
+
+    def make_control_widget(self, i, ctrl):
+        create_registered_widget(self.obj, ctrl, self.params.copy_chain_widget_type or 'bone')
+
     ##############################
     # ORG chain
 
@@ -36,17 +50,34 @@ class Rig(SimpleChainRig, copy_chain):
             RigifyParameters PropertyGroup
         """
         super().add_parameters(params)
-        params.enable_scale = bpy.props.BoolProperty(name="Scale", default=False, description="Deformation bones will inherit the scale of their ORG bones. Enable this only if you know what you are doing because scale can break your rig in the game engine")
+        params.enable_scale = bpy.props.BoolProperty(
+            name="Scale",
+            default=False,
+            description="Deformation bones will inherit the scale of their ORG bones. Enable this only if you know what you are doing because scale can break your rig in the game engine"
+        )
+
+        params.copy_chain_widget_type = bpy.props.StringProperty(
+            name        = "Widget Type",
+            default     = 'bone',
+            description = "Choose the type of the widget to create"
+        )
 
     @classmethod
     def parameters_ui(self, layout, params):
         """ Create the ui for the rig parameters.
         """
         super().parameters_ui(layout, params)
-        #layout.separator(factor = 0.2)
+
         r = layout.row()
         r.prop(params, "enable_scale")
 
+        r = layout.split(factor=0.3)
+        r.label(text='Widget')
+        r.enabled = params.make_controls
+
+        r2 = r.row(align=True)
+        r2.enabled = params.make_controls
+        layout_widget_dropdown(r2, params, "copy_chain_widget_type", text="")
 
 
 def create_sample(obj):
@@ -54,11 +85,13 @@ def create_sample(obj):
     """
     bones = orig_create_sample(obj)
 
-    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.mode_set(mode='POSE')
     pbone = obj.pose.bones[bones['bone.01']]
     pbone.rigify_type = 'game.copy_chain'
 
 
     bpy.ops.object.mode_set(mode='EDIT')
+    obj.data.edit_bones[bones['bone.02']].roll = 0.0
+    obj.data.edit_bones[bones['bone.03']].roll = 0.0
 
     return bones
