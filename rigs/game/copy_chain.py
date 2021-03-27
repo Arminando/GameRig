@@ -26,7 +26,7 @@ class Rig(SimpleChainRig, copy_chain):
     # Control chain
 
     @stage.generate_widgets
-    def generate_widgets(self):
+    def make_control_widgets(self):
         if self.make_controls:
             # Create control widget
             for args in zip(count(0), self.bones.ctrl.fk):

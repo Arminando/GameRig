@@ -2,6 +2,9 @@ import bpy, os, importlib
 
 from bpy.props import StringProperty
 
+from . import gamerig_generator
+from . import ui
+
 rigify_info = {
 	'name': "GameRig",
 	'author': "Armin Halac",
@@ -13,7 +16,8 @@ rigify_info = {
 }
 
 modules = [
-    # Add custom module imports here
+    gamerig_generator,
+    ui,
 ]
 
 def register():
@@ -24,7 +28,7 @@ def register():
     from bpy.utils import register_class
     for m in modules:
         importlib.reload(m)
-        n.register()
+        m.register()
 
 def unregister():
 
@@ -35,7 +39,9 @@ def unregister():
     for m in reversed(modules):
         m.unregister
 
+"""
 # Copyied this from cloudrig, need to check what it does exactly
 from rigify import feature_set_list
 if not hasattr(feature_set_list, 'call_register_function'):
 	register()
+"""
