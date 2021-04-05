@@ -2,21 +2,21 @@ import bpy, os, importlib
 
 from bpy.props import StringProperty
 
-from . import gamerig_generator
+from . import gamerig_generate
 from . import ui
 
 rigify_info = {
-	'name': "GameRig",
-	'author': "Armin Halac",
-	'version': (0, 0, 1),
-	'blender': (2, 92, 0),
-	'description': "Feature set made for game rigs",
-	'doc_url': "TODO",
-	'link': "TODO",
+    'name': "GameRig",
+    'author': "Armin Halac",
+    'version': (0, 0, 1),
+    'blender': (2, 92, 0),
+    'description': "Feature set made for game rigs",
+    'doc_url': "TODO",
+    'link': "TODO",
 }
 
 modules = [
-    gamerig_generator,
+    gamerig_generate,
     ui,
 ]
 
@@ -40,8 +40,8 @@ def unregister():
         m.unregister
 
 """
-# Copyied this from cloudrig, need to check what it does exactly
+# Copyed this from cloudrig, need to check what it does exactly
 from rigify import feature_set_list
 if not hasattr(feature_set_list, 'call_register_function'):
-	register()
+    register()
 """
