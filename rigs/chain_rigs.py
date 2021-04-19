@@ -6,9 +6,10 @@ from ..utils.bones import BoneUtilityMixin
 from rigify.base_rig import stage
 from rigify.utils.naming import make_derived_name
 from rigify.rigs.chain_rigs import SimpleChainRig
+from rigify.rigs.basic.raw_copy import RelinkConstraintsMixin
 
 
-class SimpleChainRig(BoneUtilityMixin, SimpleChainRig):
+class SimpleChainRig(BoneUtilityMixin, RelinkConstraintsMixin, SimpleChainRig):
     """A rig that consists of 3 connected chains of control, org and deform bones."""
 
     def initialize(self):
@@ -38,22 +39,13 @@ class SimpleChainRig(BoneUtilityMixin, SimpleChainRig):
     ##############################
     # Deform chain
 
-    def make_deform_bone(self, i , org):
-        name = super().make_deform_bone(i, org)
-
-        # Preparation for making a single deformation hierarchy
-        # Enables easy finding of deformation bone to parent to in parent_deform_chain
-        self.write_def_name(self.obj, org, name)
-
-        return name
-
     @stage.parent_bones
     def parent_deform_chain(self):
         # Connect is disabled so that the deformation bones can freely follow the location of their ORG bones
         self.parent_bone_chain(self.bones.deform, use_connect=False)
 
         # This puts the deformation bones into the def hierarchy of its parent rig
-        self.parent_to_def(self.bones.deform[0])
+        self.clean_def_hierarchy(self.bones.deform[0])
 
 
     def rig_deform_bone(self, i, deform, org):

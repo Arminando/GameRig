@@ -23,7 +23,7 @@ modules = [
 def register():
 
     # Properties
-    bpy.types.PoseBone.rigify_associated_def = StringProperty(name = "Associated DEF bone", description = "Utility property used to easily find the DEF bone this ORG bone was duplicated from.")
+    #bpy.types.PoseBone.rigify_associated_def = StringProperty(name = "Associated DEF bone", description = "Utility property used to easily find the DEF bone this ORG bone was duplicated from.")
 
     from bpy.utils import register_class
     for m in modules:
@@ -33,7 +33,7 @@ def register():
 def unregister():
 
     # Properties
-    del bpy.types.PoseBone.rigify_associated_def
+    #del bpy.types.PoseBone.rigify_associated_def
     
     from bpy.utils import unregister_class
     for m in reversed(modules):

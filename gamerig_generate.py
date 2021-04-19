@@ -23,6 +23,8 @@ class Generator_gamerig(Generator):
                 original_bones[i] = bone.name
 
         self.original_bones = original_bones
+
+
         
 
 def generate_rig(context, metarig):
