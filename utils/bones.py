@@ -15,7 +15,6 @@ class BoneUtilityMixin(BoneUtilityMixin):
                 self.generator.disable_auto_parent(bone_name)
 
     def remove_bone_parent(self, bone_name):
-        print(bone_name)
         eb = self.obj.data.edit_bones
         bone = eb[bone_name]
         bone.parent = None

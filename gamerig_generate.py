@@ -8,6 +8,7 @@ from rigify.utils.errors import MetarigError
 
 class Generator_gamerig(Generator):
 
+    # Added this just to make game.raw_copy work, which is identical to raw_copy
     def _Generator__rename_org_bones(self, obj):
         #----------------------------------
         # Make a list of the original bones so we can keep track of them.
@@ -26,7 +27,7 @@ class Generator_gamerig(Generator):
 
 
         
-
+# Part of the execute function for the class below
 def generate_rig(context, metarig):
     """ Generates a rig from a metarig.
 
