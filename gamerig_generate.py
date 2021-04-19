@@ -3,6 +3,8 @@ import bpy
 from rigify.generate import Generator
 from rigify.utils.rig import get_rigify_type
 from rigify.utils.naming import make_original_name
+from rigify.ui import rigify_report_exception
+from rigify.utils.errors import MetarigError
 
 class Generator_gamerig(Generator):
 
@@ -47,9 +49,35 @@ def generate_rig(context, metarig):
         raise e
 
 
+class GAMERIG_OT_generate(bpy.types.Operator):
+    """Generates a rig from the active metarig armature"""
+
+    bl_idname = "pose.gamerig_generate"
+    bl_label = "GameRig Generate Rig"
+    bl_options = {'UNDO'}
+    bl_description = 'Generates a rig from the active metarig armature'
+
+    def execute(self, context):
+        try:
+            generate_rig(context, context.object)
+        except MetarigError as rig_exception:
+            import traceback
+            traceback.print_exc()
+
+            rigify_report_exception(self, rig_exception)
+        except Exception as rig_exception:
+            import traceback
+            traceback.print_exc()
+
+            self.report({'ERROR'}, 'Generation has thrown an exception: ' + str(rig_exception))
+        finally:
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+        return {'FINISHED'}
+
 
 classes = [
-    
+    GAMERIG_OT_generate,
 ]
 
 def register():

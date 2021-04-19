@@ -38,10 +38,3 @@ def unregister():
     from bpy.utils import unregister_class
     for m in reversed(modules):
         m.unregister
-
-"""
-# Copyed this from cloudrig, need to check what it does exactly
-from rigify import feature_set_list
-if not hasattr(feature_set_list, 'call_register_function'):
-    register()
-"""
