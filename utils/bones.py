@@ -4,14 +4,18 @@ from rigify.utils.bones import BoneUtilityMixin
 
 class BoneUtilityMixin(BoneUtilityMixin):
 
-    def parent_to_def(self, bone_name):
-        """Check if parent has associated DEF bone and if so parent this DEF to that one to make a single DEF hierarchy"""
-        parent_bone = self.get_bone_parent(bone_name)
-        if parent_bone:
-            parents_def_bone = self.obj.pose.bones[parent_bone].rigify_associated_def
-            if parents_def_bone:
-                self.set_bone_parent(bone_name, parents_def_bone)
+    def clean_def_hierarchy(self, bone_name):
+        old_parent = self.get_bone_parent(bone_name)
+        if old_parent:
+            target = self.find_relink_target('DEF', old_parent)
+            if target:
+                self.set_bone_parent(bone_name, target)
+            else:
+                self.remove_bone_parent(bone_name)
+                self.generator.disable_auto_parent(bone_name)
 
-    def write_def_name(self, obj, org_name, bone_name):
-        """Write the associated DEF bone into the custom rigify_associated_def property so it can be found easily later for single DEF hierarchy parenting"""
-        obj.pose.bones[org_name].rigify_associated_def = bone_name
+    def remove_bone_parent(self, bone_name):
+        print(bone_name)
+        eb = self.obj.data.edit_bones
+        bone = eb[bone_name]
+        bone.parent = None
