@@ -31,7 +31,6 @@ def draw_gamerig_rigify_button(self, context):
     obj = context.object
 
     if not is_gamerig_metarig(context.object) or obj.mode=='EDIT':
-        self.draw_old(context)
         return
 
     if obj.mode not in {'POSE', 'OBJECT'}:

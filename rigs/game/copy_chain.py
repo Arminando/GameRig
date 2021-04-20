@@ -40,6 +40,13 @@ class Rig(SimpleChainRig, copy_chain):
 
     ##############################
     # Deform chain
+    
+    def rig_deform_bone(self, i, deform, org):
+        if self.enable_scale:
+            self.make_constraint(deform, 'COPY_TRANSFORMS', org)
+        else:
+            self.make_constraint(deform, 'COPY_LOCATION', org)
+            self.make_constraint(deform, 'COPY_ROTATION', org)
 
     ##############################
     # Parameter UI

@@ -6,10 +6,9 @@ from ..utils.bones import BoneUtilityMixin
 from rigify.base_rig import stage
 from rigify.utils.naming import make_derived_name
 from rigify.rigs.chain_rigs import SimpleChainRig
-from rigify.rigs.basic.raw_copy import RelinkConstraintsMixin
 
 
-class SimpleChainRig(BoneUtilityMixin, RelinkConstraintsMixin, SimpleChainRig):
+class SimpleChainRig(BoneUtilityMixin, SimpleChainRig):
     """A rig that consists of 3 connected chains of control, org and deform bones."""
 
     def initialize(self):
