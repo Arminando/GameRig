@@ -11,11 +11,7 @@ def create_sample(obj):
     """
     bones = orig_create_sample(obj)
 
-    bpy.ops.object.mode_set(mode='POSE')
     pbone = obj.pose.bones[bones['DEF-bone']]
     pbone.rigify_type = 'game.raw_copy'
-
-
-    bpy.ops.object.mode_set(mode='EDIT')
 
     return bones

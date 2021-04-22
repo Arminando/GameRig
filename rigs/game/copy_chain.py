@@ -92,12 +92,9 @@ def create_sample(obj):
     """
     bones = orig_create_sample(obj)
 
-    bpy.ops.object.mode_set(mode='POSE')
     pbone = obj.pose.bones[bones['bone.01']]
     pbone.rigify_type = 'game.copy_chain'
 
-
-    bpy.ops.object.mode_set(mode='EDIT')
     obj.data.edit_bones[bones['bone.02']].roll = 0.0
     obj.data.edit_bones[bones['bone.03']].roll = 0.0
 
