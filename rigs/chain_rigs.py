@@ -11,10 +11,7 @@ from rigify.rigs.chain_rigs import TweakChainRig as old_TweakChainRig
 
 class SimpleChainRig(BoneUtilityMixin, old_SimpleChainRig):
     """A rig that consists of 3 connected chains of control, org and deform bones."""
-    """
-    def initialize(self):
-        super().initialize()
-    """
+
     ##############################
     # Deform chain
 
