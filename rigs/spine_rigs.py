@@ -41,6 +41,14 @@ class BaseHeadTailRig(ConnectingChainRig):
 
         self.enable_scale = self.params.enable_scale
 
+
+    def rig_deform_bone(self, i, deform, org):
+        if self.enable_scale:
+            self.make_constraint(deform, 'COPY_TRANSFORMS', org)
+        else:
+            self.make_constraint(deform, 'COPY_LOCATION', org)
+            self.make_constraint(deform, 'COPY_ROTATION', org)
+
     @classmethod
     def parameters_ui(self, layout, params):
         """ Create the ui for the rig parameters.
