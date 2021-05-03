@@ -1,8 +1,10 @@
 import bpy
 
-from .chain_rigs import TweakChainRig
+from .chain_rigs import TweakChainRig, ConnectingChainRig
 
 class BaseSpineRig(TweakChainRig):
+
+    bbone_segments = None
 
     def initialize(self):
         super().initialize()
@@ -22,6 +24,22 @@ class BaseSpineRig(TweakChainRig):
             if next_tweak:
                 self.make_constraint(deform, 'DAMPED_TRACK', next_tweak)
 
+
+    @classmethod
+    def parameters_ui(self, layout, params):
+        """ Create the ui for the rig parameters.
+        """
+        super().parameters_ui(layout, params)
+
+        r = layout.row()
+        r.prop(params, "enable_scale")
+
+class BaseHeadTailRig(ConnectingChainRig):
+
+    def initialize(self):
+        super().initialize()
+
+        self.enable_scale = self.params.enable_scale
 
     @classmethod
     def parameters_ui(self, layout, params):

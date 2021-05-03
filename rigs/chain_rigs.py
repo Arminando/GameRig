@@ -23,6 +23,14 @@ class SimpleChainRig(BoneUtilityMixin, old_SimpleChainRig):
         # This puts the deformation bones into the def hierarchy of its parent rig
         self.clean_def_hierarchy(self.bones.deform[0])
 
+    def rig_deform_bone(self, i, deform, org):
+        self.make_constraint(deform, 'COPY_LOCATION', org)
+        self.make_constraint(deform, 'COPY_ROTATION', org)
+
 
 class TweakChainRig(SimpleChainRig):
     pass
+
+
+class ConnectingChainRig(TweakChainRig):
+    bbone_segments = None
