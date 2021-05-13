@@ -3,6 +3,7 @@ import bpy
 from rigify.utils.bones import BoneUtilityMixin
 from rigify.utils.naming import choose_derived_bone
 
+
 class BoneUtilityMixin(BoneUtilityMixin):
 
     def clean_def_hierarchy(self, bone_name):

@@ -57,3 +57,4 @@ class BaseHeadTailRig(ConnectingChainRig):
 
         r = layout.row()
         r.prop(params, "enable_scale")
+
