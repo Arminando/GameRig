@@ -163,18 +163,18 @@ def create(obj):
 
     bones = {}
 
-    bone = arm.edit_bones.new('root')
+    bone = arm.edit_bones.new('char_root')
     bone.head = 0.0000, 0.0000, 0.0000
     bone.tail = 0.0000, 0.2000, -0.0000
     bone.roll = 0.0000
     bone.use_connect = False
-    bones['root'] = bone.name
+    bones['char_root'] = bone.name
     bone = arm.edit_bones.new('spine.004')
     bone.head = 0.0000, 0.4418, 0.7954
     bone.tail = 0.0000, 0.3546, 0.8059
     bone.roll = 0.0000
     bone.use_connect = False
-    bone.parent = arm.edit_bones[bones['root']]
+    bone.parent = arm.edit_bones[bones['char_root']]
     bones['spine.004'] = bone.name
     bone = arm.edit_bones.new('spine.003')
     bone.head = 0.0000, 0.4418, 0.7954
@@ -409,7 +409,7 @@ def create(obj):
     bones['front_toe.R'] = bone.name
 
     bpy.ops.object.mode_set(mode='OBJECT')
-    pbone = obj.pose.bones[bones['root']]
+    pbone = obj.pose.bones[bones['char_root']]
     pbone.rigify_type = 'game.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
