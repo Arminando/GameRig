@@ -152,10 +152,10 @@ def create(obj):
     arm.rigify_layers[26].row = 1
     arm.rigify_layers[26].selset = False
     arm.rigify_layers[26].group = 0
-    arm.rigify_layers[27].name = ""
-    arm.rigify_layers[27].row = 1
+    arm.rigify_layers[27].name = "Char Root"
+    arm.rigify_layers[27].row = 13
     arm.rigify_layers[27].selset = False
-    arm.rigify_layers[27].group = 0
+    arm.rigify_layers[27].group = 1
     arm.rigify_layers[28].name = "Root"
     arm.rigify_layers[28].row = 14
     arm.rigify_layers[28].selset = False
@@ -381,7 +381,7 @@ def create(obj):
     pbone.lock_rotation_w = False
     pbone.lock_scale = (False, False, False)
     pbone.rotation_mode = 'QUATERNION'
-    pbone.bone.layers = [False, False, False, True, False, False, False, True, False, False, True, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+    pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False]
     try:
         pbone.rigify_parameters.super_copy_widget_type = "diamond"
     except AttributeError:
@@ -712,7 +712,7 @@ def create(obj):
         bone.bbone_x = bone.bbone_z = bone.length * 0.05
         arm.edit_bones.active = bone
 
-    arm.layers = [(x in [3, 7, 10, 13, 16]) for x in range(32)]
+    arm.layers = [(x in [3, 7, 10, 13, 16, 27]) for x in range(32)]
 
     return bones
 
