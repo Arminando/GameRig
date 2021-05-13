@@ -6,6 +6,8 @@ from rigify.utils.naming import make_original_name
 from rigify.ui import rigify_report_exception
 from rigify.utils.errors import MetarigError
 
+ROOT_NAME = "world"
+
 class Generator_gamerig(Generator):
 
     # Added this just to make game.raw_copy work, which is identical to raw_copy
