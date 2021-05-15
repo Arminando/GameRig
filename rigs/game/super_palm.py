@@ -4,8 +4,7 @@ from ...utils.bones import BoneUtilityMixin
 
 from rigify.base_rig import stage
 from rigify.rigs.limbs.super_palm import Rig as old_super_palm
-from rigify.rigs.limbs.super_palm import make_palm_widget
-from rigify.utils.naming import strip_org, make_derived_name, choose_derived_bone
+from rigify.utils.naming import make_derived_name
 from rigify.utils.misc import map_list
 
 
