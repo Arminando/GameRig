@@ -11,8 +11,8 @@ rigify_info = {
     'version': (0, 0, 1),
     'blender': (2, 92, 0),
     'description': "Feature set made for game rigs",
-    'doc_url': "TODO",
-    'link': "TODO",
+    'doc_url': "https://github.com/Arminando/GameRig#readme",
+    'link': "https://github.com/Arminando/GameRig",
 }
 
 modules = [
