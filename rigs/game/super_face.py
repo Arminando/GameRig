@@ -43,9 +43,11 @@ class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
                 for constraint in constraints:
                     move_constraint(bones[def_bone], bones[org(strip_def(def_bone))], constraint)
 
-
-            self.make_constraint(def_bone, 'COPY_LOCATION', org(strip_def(def_bone)))            
-            self.make_constraint(def_bone, 'COPY_ROTATION', org(strip_def(def_bone)))
+            if self.params.enable_scale:
+                self.make_constraint(def_bone, 'COPY_TRANSFORMS', org(strip_def(def_bone)))            
+            else:
+                self.make_constraint(def_bone, 'COPY_LOCATION', org(strip_def(def_bone)))            
+                self.make_constraint(def_bone, 'COPY_ROTATION', org(strip_def(def_bone)))
 
 
 
@@ -58,6 +60,12 @@ def add_parameters(params):
     ControlLayersOption.FACE_PRIMARY.add_parameters(params)
     ControlLayersOption.FACE_SECONDARY.add_parameters(params)
 
+    params.enable_scale = bpy.props.BoolProperty(
+        name="Scale",
+        default=False,
+        description="Deformation bones will inherit the scale of their ORG bones. Enable this only if you know what you are doing because scale can break your rig in the game engine"
+    )
+
 
 def parameters_ui(layout, params):
     """ Create the ui for the rig parameters."""
@@ -65,6 +73,8 @@ def parameters_ui(layout, params):
     ControlLayersOption.FACE_PRIMARY.parameters_ui(layout, params)
     ControlLayersOption.FACE_SECONDARY.parameters_ui(layout, params)
 
+    r = layout.row()
+    r.prop(params, "enable_scale")
 
 
 def create_sample(obj):
