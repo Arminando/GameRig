@@ -15,12 +15,16 @@ class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
         super().parent_bones(all_bones, tweak_unique)
 
         face_name = [ bone for bone in self.org_bones if 'face' in bone ].pop()
-        valid_parents = all_bones["deform"]["all"] + [face_name]
 
         for def_bone in all_bones["deform"]["all"]:
             parent = parent_orig = self.get_bone_parent(def_bone)
 
-            while parent not in valid_parents:
+            while parent:                
+                parent_def = deformer(strip_org(parent))
+                print(parent_def)
+                if parent_def in self.obj.pose.bones:
+                    parent = parent_def
+                    break
                 parent = self.get_bone_parent(parent)
 
             self.set_bone_parent(org(strip_def(def_bone)), parent_orig)
