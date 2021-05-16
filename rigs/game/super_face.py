@@ -21,8 +21,8 @@ class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 
             while parent:                
                 parent_def = deformer(strip_org(parent))
-                print(parent_def)
-                if parent_def in self.obj.pose.bones:
+
+                if parent_def in self.obj.pose.bones and parent_def != def_bone:
                     parent = parent_def
                     break
                 parent = self.get_bone_parent(parent)
