@@ -2,12 +2,13 @@ import bpy
 
 from rigify.rigs.faces.super_face import Rig as old_super_face
 from rigify.utils.layers import ControlLayersOption
-from rigify.utils.naming import org, strip_org, make_deformer_name, make_mechanism_name
+from rigify.utils.naming import org, strip_org, make_deformer_name, strip_def
 from rigify.utils.bones import copy_bone
+from rigify.utils.mechanism import MechanismUtilityMixin
 
 from ...utils.bones import BoneUtilityMixin
 
-class Rig(BoneUtilityMixin, old_super_face):
+class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 
 
     def create_deformation(self):
@@ -49,184 +50,41 @@ class Rig(BoneUtilityMixin, old_super_face):
 
 
     def parent_bones(self, all_bones, tweak_unique):
-        org_bones = self.org_bones
-        bpy.ops.object.mode_set(mode ='EDIT')
-        eb = self.obj.data.edit_bones
+        super().parent_bones(all_bones, tweak_unique)
 
-        face_name = [ bone for bone in org_bones if 'face' in bone ].pop()
-"""
-        # Initially parenting all bones to the face org bone.
-        for category in list( all_bones.keys() ):
-            for area in list( all_bones[category] ):
-                for bone in all_bones[category][area]:
-                    eb[ bone ].parent = eb[ face_name ]
-        
-        ## Parenting all deformation bones and org bones
+        face_name = [ bone for bone in self.org_bones if 'face' in bone ].pop()
+        valid_parents = all_bones["deform"]["all"] + [face_name]
+    
+        for def_bone in all_bones["deform"]["all"]:
+            parent = self.get_bone_parent(def_bone)
 
-        # Parent all the deformation bones that have respective tweaks
-        def_tweaks = [ bone for bone in all_bones['deform']['all'] if bone[4:] in all_bones['tweaks']['all'] ]
+            while parent not in valid_parents:
+                parent = self.get_bone_parent(parent)
 
-        # Parent all org bones to the ORG-face
-        for bone in [ bone for bone in org_bones if 'face' not in bone ]:
-            eb[ bone ].parent = eb[ org('face') ]
+            self.set_bone_parent(def_bone, parent)
+            
 
-        for bone in def_tweaks:
-            # the def and the matching org bone are parented to their corresponding tweak,
-            # whose name is the same as that of the def bone, without the "DEF-" (first 4 chars)
-            eb[ bone ].parent            = eb[ bone[4:] ]
-            eb[ org( bone[4:] ) ].parent = eb[ bone[4:] ]
+    def constraints(self, all_bones):
+        super().constraints(all_bones)
 
-        # Parent ORG eyes to corresponding mch bones
-        for bone in [ bone for bone in org_bones if 'eye' in bone ]:
-            eb[ bone ].parent = eb[ make_mechanism_name( strip_org( bone ) ) ]
+        bones = self.obj.pose.bones
 
-        for lip_tweak in list( tweak_unique.values() ):
-            # find the def bones that match unique lip_tweaks by slicing [4:-2]
-            # example: 'lip.B' matches 'DEF-lip.B.R' and 'DEF-lip.B.L' if
-            # you cut off the "DEF-" [4:] and the ".L" or ".R" [:-2]
-            lip_defs = [ bone for bone in all_bones['deform']['all'] if bone[4:-2] == lip_tweak ]
+        for def_bone in all_bones["deform"]["all"]:
+            constraints = bones[def_bone].constraints
+            subtarget = None
+            head_tail = 0.0
 
-            for bone in lip_defs:
-                eb[bone].parent = eb[ lip_tweak ]
+            if constraints:
+                subtarget = constraints[0].subtarget
+                head_tail = constraints[0].head_tail
+                bones[def_bone].constraints.remove(constraints[0])
 
-        # parent cheek bones top respetive tweaks
-        lips  = [ 'lips.L',   'lips.R'   ]
-        brows = [ 'brow.T.L', 'brow.T.R' ]
-        cheekB_defs = [ 'DEF-cheek.B.L', 'DEF-cheek.B.R' ]
-        cheekT_defs = [ 'DEF-cheek.T.L', 'DEF-cheek.T.R' ]
+            self.make_constraint(def_bone, 'COPY_LOCATION', org(strip_def(def_bone)))
+            self.make_constraint(def_bone, 'COPY_ROTATION', org(strip_def(def_bone)))
 
-        for lip, brow, cheekB, cheekT in zip( lips, brows, cheekB_defs, cheekT_defs ):
-            eb[ cheekB ].parent = eb[ lip ]
-            eb[ cheekT ].parent = eb[ brow ]
-
-        # parent ear deform bones to their controls
-        ear_defs  = [ 'DEF-ear.L', 'DEF-ear.L.001', 'DEF-ear.R', 'DEF-ear.R.001' ]
-        ear_ctrls = [ 'ear.L', 'ear.R' ]
-
-        eb[ 'DEF-jaw' ].parent = eb[ 'jaw' ] # Parent jaw def bone to jaw tweak
-
-        for ear_ctrl in ear_ctrls:
-            for ear_def in ear_defs:
-                if ear_ctrl in ear_def:
-                    eb[ ear_def ].parent = eb[ ear_ctrl ]
-
-        # Parent eyelid deform bones (each lid def bone is parented to its respective MCH bone)
-        def_lids = [ bone for bone in all_bones['deform']['all'] if 'lid' in bone ]
-
-        for bone in def_lids:
-            mch = make_mechanism_name( bone[4:] )
-            eb[ bone ].parent = eb[ mch ]
-
-        ## Parenting all mch bones
-
-        eb[ 'MCH-eyes_parent' ].parent = None  # eyes_parent will be parented to root
-
-        # parent all mch tongue bones to the jaw master control bone
-        for bone in all_bones['mch']['tongue']:
-            eb[ bone ].parent = eb[ all_bones['ctrls']['jaw'][0] ]
-
-        ## Parenting the control bones
-
-        # parent teeth.B and tongue master controls to the jaw master control bone
-        for bone in [ 'teeth.B', 'tongue_master' ]:
-            eb[ bone ].parent = eb[ all_bones['ctrls']['jaw'][0] ]
-
-        # eyes
-        eb[ 'eyes' ].parent = eb[ 'MCH-eyes_parent' ]
-
-        eyes = [
-            bone for bone in all_bones['ctrls']['eyes'] if 'eyes' not in bone
-        ][0:2]
-
-        for eye in eyes:
-            eb[ eye ].parent = eb[ 'eyes' ]
-
-        ## turbo: parent eye master bones to face
-        for eye_master in eyes[2:]:
-            eb[ eye_master ].parent = eb[ 'ORG-face' ]
-
-        # Parent brow.b, eyes mch and lid tweaks and mch bones to masters
-        tweaks = [
-            b for b in all_bones['tweaks']['all'] if 'lid' in b or 'brow.B' in b
-        ]
-        mch = all_bones['mch']['lids']  + \
-              all_bones['mch']['eye.R'] + \
-              all_bones['mch']['eye.L']
-
-        everyone = tweaks + mch
-
-        left, right = self.symmetrical_split( everyone )
-
-        for l in left:
-            eb[ l ].parent = eb[ 'master_eye.L' ]
-
-        for r in right:
-            eb[ r ].parent = eb[ 'master_eye.R' ]
-
-        ## turbo: nose to mch jaw.004
-        eb[ all_bones['ctrls']['nose'].pop() ].parent = eb['MCH-jaw_master.004']
-
-        ## Parenting the tweak bones
-
-        # Jaw children (values) groups and their parents (keys)
-        groups = {
-            'jaw_master'         : [
-                'jaw',
-                'jaw.R.001',
-                'jaw.L.001',
-                'chin.L',
-                'chin.R',
-                'chin',
-                'tongue.003'
-                ],
-            'MCH-jaw_master'     : [
-                 'lip.B'
-                ],
-            'MCH-jaw_master.001' : [
-                'lip.B.L.001',
-                'lip.B.R.001'
-                ],
-            'MCH-jaw_master.002' : [
-                'lips.L',
-                'lips.R',
-                'cheek.B.L.001',
-                'cheek.B.R.001'
-                ],
-            'MCH-jaw_master.003' : [
-                'lip.T',
-                'lip.T.L.001',
-                'lip.T.R.001'
-                ],
-            'MCH-jaw_master.004' : [
-                'cheek.T.L.001',
-                'cheek.T.R.001'
-                ],
-            'nose_master'        : [
-                'nose.002',
-                'nose.004',
-                'nose.L.001',
-                'nose.R.001'
-                ]
-             }
-
-        for parent in list( groups.keys() ):
-            for bone in groups[parent]:
-                eb[ bone ].parent = eb[ parent ]
-
-        # Remaining arbitrary relatioships for tweak bone parenting
-        eb[ 'chin.001'   ].parent = eb[ 'chin'           ]
-        eb[ 'chin.002'   ].parent = eb[ 'lip.B'          ]
-        eb[ 'nose.001'   ].parent = eb[ 'nose.002'       ]
-        eb[ 'nose.003'   ].parent = eb[ 'nose.002'       ]
-        eb[ 'nose.005'   ].parent = eb[ 'lip.T'          ]
-        eb[ 'tongue'     ].parent = eb[ 'tongue_master'  ]
-        eb[ 'tongue.001' ].parent = eb[ 'MCH-tongue.001' ]
-        eb[ 'tongue.002' ].parent = eb[ 'MCH-tongue.002' ]
-
-        for bone in [ 'ear.L.002', 'ear.L.003', 'ear.L.004' ]:
-            eb[ bone                       ].parent = eb[ 'ear.L' ]
-            eb[ bone.replace( '.L', '.R' ) ].parent = eb[ 'ear.R' ]
-"""
+            if constraints and subtarget:
+                con = self.make_constraint(def_bone, 'DAMPED_TRACK', subtarget)
+                con.head_tail = head_tail
 
 
 def add_parameters(params):
