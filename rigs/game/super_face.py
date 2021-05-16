@@ -2,51 +2,13 @@ import bpy
 
 from rigify.rigs.faces.super_face import Rig as old_super_face
 from rigify.utils.layers import ControlLayersOption
-from rigify.utils.naming import org, strip_org, make_deformer_name, strip_def
+from rigify.utils.naming import org, deformer, strip_org, make_deformer_name, strip_def
 from rigify.utils.bones import copy_bone
-from rigify.utils.mechanism import MechanismUtilityMixin
+from rigify.utils.mechanism import MechanismUtilityMixin, move_constraint
 
 from ...utils.bones import BoneUtilityMixin
 
 class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
-
-
-    def create_deformation(self):
-        org_bones = self.org_bones
-
-        bpy.ops.object.mode_set(mode='EDIT')
-        eb = self.obj.data.edit_bones
-
-        def_bones = []
-        for org in org_bones:
-            if 'face' in org or 'teeth' in org or 'eye' in org:
-                continue
-
-            def_name = make_deformer_name( strip_org( org ) )
-            def_name = copy_bone( self.obj, org, def_name, parent=True)
-            def_bones.append( def_name )
-
-            eb[def_name].use_connect = False
-            eb[def_name].parent      = None
-
-        brow_top_names = [ bone for bone in def_bones if 'brow.T'   in bone ]
-        forehead_names = [ bone for bone in def_bones if 'forehead' in bone ]
-
-        brow_left, brow_right         = self.symmetrical_split( brow_top_names )
-        forehead_left, forehead_right = self.symmetrical_split( forehead_names )
-
-        brow_left  = brow_left[1:]
-        brow_right = brow_right[1:]
-        brow_left.reverse()
-        brow_right.reverse()
-
-        for browL, browR, foreheadL, foreheadR in zip(
-            brow_left, brow_right, forehead_left, forehead_right ):
-
-            eb[foreheadL].tail = eb[browL].head
-            eb[foreheadR].tail = eb[browR].head
-
-        return { 'all' : def_bones }
 
 
     def parent_bones(self, all_bones, tweak_unique):
@@ -54,13 +16,14 @@ class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 
         face_name = [ bone for bone in self.org_bones if 'face' in bone ].pop()
         valid_parents = all_bones["deform"]["all"] + [face_name]
-    
+
         for def_bone in all_bones["deform"]["all"]:
-            parent = self.get_bone_parent(def_bone)
+            parent = parent_orig = self.get_bone_parent(def_bone)
 
             while parent not in valid_parents:
                 parent = self.get_bone_parent(parent)
 
+            self.set_bone_parent(org(strip_def(def_bone)), parent_orig)
             self.set_bone_parent(def_bone, parent)
             
 
@@ -71,20 +34,15 @@ class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 
         for def_bone in all_bones["deform"]["all"]:
             constraints = bones[def_bone].constraints
-            subtarget = None
-            head_tail = 0.0
-
+            
             if constraints:
-                subtarget = constraints[0].subtarget
-                head_tail = constraints[0].head_tail
-                bones[def_bone].constraints.remove(constraints[0])
+                for constraint in constraints:
+                    move_constraint(bones[def_bone], bones[org(strip_def(def_bone))], constraint)
 
-            self.make_constraint(def_bone, 'COPY_LOCATION', org(strip_def(def_bone)))
+
+            self.make_constraint(def_bone, 'COPY_LOCATION', org(strip_def(def_bone)))            
             self.make_constraint(def_bone, 'COPY_ROTATION', org(strip_def(def_bone)))
 
-            if constraints and subtarget:
-                con = self.make_constraint(def_bone, 'DAMPED_TRACK', subtarget)
-                con.head_tail = head_tail
 
 
 def add_parameters(params):
