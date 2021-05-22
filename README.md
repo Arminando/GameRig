@@ -1,3 +1,8 @@
+If you use GameRig and it saves you time or money, or if you would like to access a whole lot of rigging tutorials with more being added every month, consider joining my Patreon here:
+
+[![Patreon](images/Digital-Patreon-Logo_FieryCoral.png)](https://www.patreon.com/arminhalac)
+
+
 # GameRig
 
 GameRig is a so called feature set made for creating game engine compatible rigs using Blender's Rigify system.
