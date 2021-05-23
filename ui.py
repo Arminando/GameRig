@@ -55,12 +55,14 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
             armature_id_store = C.object.data
 
             has_non_game_rigs = False
+            is_game_metarig = is_gamerig_metarig(obj)
 
             for b in obj.pose.bones:
                 if b.rigify_type and "game" not in b.rigify_type:
                     has_non_game_rigs = True
+                    break
 
-            if has_non_game_rigs:
+            if has_non_game_rigs and is_game_metarig:
                 layout.label(text="Non Game types detected", icon='ERROR')
 
             row = layout.row()
@@ -69,7 +71,10 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
             col = layout.column(align=True)
             col.active = (not 'rig_id' in C.object.data)
 
-            layout.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
+            if is_game_metarig:
+                col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
+            else:
+                col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
 
             col = layout.column(align=True)
             col.separator()
@@ -132,31 +137,11 @@ class DATA_PT_gamerig_layer_names(bpy.types.Panel):
                 layout.operator("pose.rigify_layer_init")
                 return
 
-        ######
-        
-        # for i, rigify_layer in enumerate(arm.rigify_layers):
-        #     main_row = layout.row(align=True).split(factor=0.05)
-        #     col_i = main_row.column(align=True)
-        #     col = main_row.column(align=True)
-
-        #     col_i.label(text=str(i))
-
-        #     row = col.row(align=True).split(factor=0.1)
-        #     icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
-        #     row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-        #     row.prop(rigify_layer, "name", text="")
-
-        #     col = layout.column(align=True)
-        #     row = col.row(align=True)
-        #     row.prop(rigify_layer, "row", text="UI Row", slider=True)
-        #     icon = 'RADIOBUT_ON' if rigify_layer.selset else 'RADIOBUT_OFF'
-        #     row.prop(rigify_layer, "selset", text="", toggle=True, icon=icon)
-        #     row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name)
-
         # UI
         main_row = layout.row(align=True).split(factor=0.05)
-        col1 = main_row.column()
-        col2 = main_row.column()
+        col1 = main_row.column(align=True)
+        col2 = main_row.column(align=True)
+
         col1.label()
         for i in range(32):
             if i == 16 or i == 29:
@@ -174,38 +159,57 @@ class DATA_PT_gamerig_layer_names(bpy.types.Panel):
             if (i % 8) == 0:
                 col = col2.column()
             if i != 28:
-                row = col.row(align=True)
+                col2_row = col2.row(align=True).split(factor=0.7)
+                col2_1 = col2_row.column(align=True)
+                col2_2 = col2_row.column(align=True)
+
+                row = col2_1.row(align=True).split(factor=0.65)
+                row.prop(rigify_layer, "name", text="")
                 icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
                 row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-                row.prop(rigify_layer, "name", text="")
-                row.prop(rigify_layer, "row", text="UI")
+                row.prop(rigify_layer, "row", text="")
+
+                row = col2_2.row(align=True)
+                
                 icon = 'RADIOBUT_ON' if rigify_layer.selset else 'RADIOBUT_OFF'
                 row.prop(rigify_layer, "selset", text="", toggle=True, icon=icon)
                 row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
             else:
-                row = col.row(align=True)
+                col2_row = col2.row(align=True).split(factor=0.7)
+                col2_1 = col2_row.column(align=True)
+                col2_2 = col2_row.column(align=True)
 
-                icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
-                row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-                row1 = row.split(align=True).row(align=True)
-                row1.prop(rigify_layer, "name", text="")
-                row1.prop(rigify_layer, "row", text="UI Row")
-                row1.enabled = False
+                row = col2_1.row(align=True).split(factor=0.65)
+                row.prop(rigify_layer, "name", text="")
+                row.label()
+                row.label()
+                row.enabled = False
+
+                row = col2_2.row(align=True)             
                 icon = 'RADIOBUT_ON' if rigify_layer.selset else 'RADIOBUT_OFF'
                 row.prop(rigify_layer, "selset", text="", toggle=True, icon=icon)
                 row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
-            
+        
 
-        col = col2.column()
+        col = col2.column(align=True)
         col.label(text="Reserved:")
         # reserved_names = {28: 'Root', 29: 'DEF', 30: 'MCH', 31: 'ORG'}
-        reserved_names = {29: 'DEF', 30: 'MCH', 31: 'ORG'}
+        reserved_names = {29: 'DEF', 30: 'MCH', 31: 'ORG'} 
+        
         # for i in range(28, 32):
         for i in range(29, 32):
-            row = col.row(align=True)
+            col2_row = col2.row(align=True).split(factor=0.7)
+            col2_1 = col2_row.column(align=True)
+            col2_2 = col2_row.column(align=True)
+
+            row = col2_1.row(align=True).split(factor=0.65)
+            row.label(text=reserved_names[i])
             icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
             row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-            row.label(text=reserved_names[i])
+            row.label()
+
+            
+            
 
 
 classes = [
