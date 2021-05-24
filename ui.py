@@ -209,12 +209,99 @@ class DATA_PT_gamerig_layer_names(bpy.types.Panel):
             row.label()
 
             
-            
+
+class DATA_PT_gamerig_bone_groups(bpy.types.Panel):
+    bl_label = "Rigify Bone Groups"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'GameRig'
+    bl_options = {'DEFAULT_CLOSED'}
+
+
+    @classmethod
+    def poll(cls, context):
+        if not context.object:
+            return False
+        return context.object.type == 'ARMATURE' and context.active_object.data.get("rig_id") is None
+
+    def draw(self, context):
+        obj = context.object
+        armature = obj.data
+        color_sets = obj.data.rigify_colors
+        idx = obj.data.rigify_colors_index
+
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+
+        row = layout.row()
+        row.template_list("DATA_UL_gamerig_bone_groups", "", obj.data, "rigify_colors", obj.data, "rigify_colors_index")
+        col = row.column(align=True)
+        col.operator("armature.rigify_bone_group_add", icon='ADD', text="")
+        col.operator("armature.rigify_bone_group_remove", icon='REMOVE', text="").idx = obj.data.rigify_colors_index
+        col.separator()
+        col.menu("DATA_MT_gamerig_bone_groups_context_menu", icon='DOWNARROW_HLT', text="")
+
+        if obj.data.rigify_colors_index < len(obj.data.rigify_colors.items()):
+            split = layout.split(factor=0.3)
+            col = split.column()
+            col.label(text="")
+            col = split.column()
+
+            col.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "normal", text="Colors")
+            col = split.column()
+            sub = col.row(align=True)
+            sub.enabled = obj.data.rigify_colors_lock  # only custom colors are editable
+            sub.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "select", text="")
+            sub.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "active", text="")
+
+        layout.separator()
+        box = layout.box()
+        row = box.row()
+        icon = 'LOCKED' if armature.rigify_colors_lock else 'UNLOCKED'
+        row.prop(armature, 'rigify_colors_lock', text = 'Unified select/active colors', icon=icon)
+        if armature.rigify_colors_lock:
+
+            split = box.split(factor=0.5)
+            col = split.column()
+            col.label(text="")
+            col = split.column()
+
+            sub = col.row(align=True)
+            sub.enabled = obj.data.rigify_colors_lock  # only custom colors are editable
+            sub.prop(armature.rigify_selection_colors, 'select', text='')
+            sub.prop(armature.rigify_selection_colors, 'active', text='')
+            sub.operator("armature.rigify_use_standard_colors", icon='FILE_REFRESH', text='') 
+            sub.operator("armature.rigify_apply_selection_colors", icon='EYEDROPPER', text='')
+
+        box.separator()
+        row = box.row()
+        row.prop(armature, 'rigify_theme_to_add', text = '')
+        op = row.operator("armature.rigify_bone_group_add_theme", text="Add From Theme")
+        op.theme = armature.rigify_theme_to_add
+
+
+class DATA_UL_gamerig_bone_groups(bpy.types.UIList):
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+        layout.prop(item, "name", text="", emboss=False, icon='GROUP_BONE')
+        
+
+class DATA_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
+    bl_label = 'Rigify Bone Groups Specials'
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.operator("armature.rigify_add_bone_groups", text="Add Standard")
+        layout.operator('armature.rigify_bone_group_remove_all')
 
 
 classes = [
     VIEW3D_PT_gamerig_buttons,
     DATA_PT_gamerig_layer_names,
+    DATA_UL_gamerig_bone_groups,
+    DATA_PT_gamerig_bone_groups,
+    DATA_MT_gamerig_bone_groups_context_menu,
 ]
 
 
