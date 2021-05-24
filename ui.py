@@ -274,12 +274,6 @@ class DATA_PT_gamerig_bone_groups(bpy.types.Panel):
             sub.operator("armature.rigify_use_standard_colors", icon='FILE_REFRESH', text='') 
             sub.operator("armature.rigify_apply_selection_colors", icon='EYEDROPPER', text='')
 
-        box.separator()
-        row = box.row()
-        row.prop(armature, 'rigify_theme_to_add', text = '')
-        op = row.operator("armature.rigify_bone_group_add_theme", text="Add From Theme")
-        op.theme = armature.rigify_theme_to_add
-
 
 class DATA_UL_gamerig_bone_groups(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
@@ -294,6 +288,8 @@ class DATA_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
 
         layout.operator("armature.rigify_add_bone_groups", text="Add Standard")
         layout.operator('armature.rigify_bone_group_remove_all')
+        op = layout.operator("armature.rigify_bone_group_add_theme", text="Add From Theme")
+        op.theme = context.object.data.rigify_theme_to_add
 
 
 classes = [
