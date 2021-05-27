@@ -36,6 +36,7 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = 'GameRig'
 
+
     @classmethod
     def poll(cls, context):
         if not context.object:
@@ -106,7 +107,7 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
             props.metarig_type = id_store.rigify_types[id_store.rigify_active_type].name
 
 
-class DATA_PT_gamerig_layer_names(bpy.types.Panel):
+class VIEW3D_PT_gamerig_layer_names(bpy.types.Panel):
     bl_label = "Rigify Layer Names"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -159,36 +160,41 @@ class DATA_PT_gamerig_layer_names(bpy.types.Panel):
             if (i % 8) == 0:
                 col = col2.column()
             if i != 28:
-                col2_row = col2.row(align=True).split(factor=0.7)
+                col2_row = col2.row(align=True).split(factor=0.5)
                 col2_1 = col2_row.column(align=True)
                 col2_2 = col2_row.column(align=True)
+                col2_3 = col2_row.column(align=True)
 
-                row = col2_1.row(align=True).split(factor=0.65)
+                row = col2_1.row(align=True)
                 row.prop(rigify_layer, "name", text="")
+                
+                row = col2_2.row(align=True)
+                row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
+
+                row = col2_3.row(align=True)
+                row.prop(rigify_layer, "row", text="")              
                 icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
                 row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-                row.prop(rigify_layer, "row", text="")
-
-                row = col2_2.row(align=True)
-                
                 icon = 'RADIOBUT_ON' if rigify_layer.selset else 'RADIOBUT_OFF'
                 row.prop(rigify_layer, "selset", text="", toggle=True, icon=icon)
-                row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
             else:
-                col2_row = col2.row(align=True).split(factor=0.7)
+                col2_row = col2.row(align=True).split(factor=0.5)
                 col2_1 = col2_row.column(align=True)
                 col2_2 = col2_row.column(align=True)
+                col2_3 = col2_row.column(align=True)
 
-                row = col2_1.row(align=True).split(factor=0.65)
+                row = col2_1.row(align=True)
                 row.prop(rigify_layer, "name", text="")
-                row.label()
-                row.label()
-                row.enabled = False
 
                 row = col2_2.row(align=True)             
+                row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
+
+                row = col2_3.row(align=True)
+                row.label()
+                row.label()
                 icon = 'RADIOBUT_ON' if rigify_layer.selset else 'RADIOBUT_OFF'
                 row.prop(rigify_layer, "selset", text="", toggle=True, icon=icon)
-                row.prop(rigify_layer, "group", text=arm.rigify_colors[rigify_layer.group-1].name if rigify_layer.group != 0 else "None")
+                
         
 
         col = col2.column(align=True)
@@ -198,19 +204,26 @@ class DATA_PT_gamerig_layer_names(bpy.types.Panel):
         
         # for i in range(28, 32):
         for i in range(29, 32):
-            col2_row = col2.row(align=True).split(factor=0.7)
+            col2_row = col2.row(align=True).split(factor=0.5)
             col2_1 = col2_row.column(align=True)
             col2_2 = col2_row.column(align=True)
+            col2_3 = col2_row.column(align=True)
 
-            row = col2_1.row(align=True).split(factor=0.65)
+            row = col2_1.row(align=True)
             row.label(text=reserved_names[i])
+
+            row = col2_2.row(align=True)
+            row.label(text="")
+
+            row = col2_3.row(align=True).split(factor=0.4)
+            row.label()
             icon = 'RESTRICT_VIEW_OFF' if arm.layers[i] else 'RESTRICT_VIEW_ON'
             row.prop(arm, "layers", index=i, text="", toggle=True, icon=icon)
-            row.label()
+            
 
             
 
-class DATA_PT_gamerig_bone_groups(bpy.types.Panel):
+class VIEW3D_PT_gamerig_bone_groups(bpy.types.Panel):
     bl_label = "Rigify Bone Groups"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -235,12 +248,12 @@ class DATA_PT_gamerig_bone_groups(bpy.types.Panel):
         layout.use_property_decorate = False
 
         row = layout.row()
-        row.template_list("DATA_UL_gamerig_bone_groups", "", obj.data, "rigify_colors", obj.data, "rigify_colors_index")
+        row.template_list("VIEW3D_UL_gamerig_bone_groups", "", obj.data, "rigify_colors", obj.data, "rigify_colors_index")
         col = row.column(align=True)
         col.operator("armature.rigify_bone_group_add", icon='ADD', text="")
         col.operator("armature.rigify_bone_group_remove", icon='REMOVE', text="").idx = obj.data.rigify_colors_index
         col.separator()
-        col.menu("DATA_MT_gamerig_bone_groups_context_menu", icon='DOWNARROW_HLT', text="")
+        col.menu("VIEW3D_MT_gamerig_bone_groups_context_menu", icon='DOWNARROW_HLT', text="")
 
         if obj.data.rigify_colors_index < len(obj.data.rigify_colors.items()):
             split = layout.split(factor=0.3)
@@ -282,12 +295,12 @@ class DATA_PT_gamerig_bone_groups(bpy.types.Panel):
         
 
 
-class DATA_UL_gamerig_bone_groups(bpy.types.UIList):
+class VIEW3D_UL_gamerig_bone_groups(bpy.types.UIList):
     def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
         layout.prop(item, "name", text="", emboss=False, icon='GROUP_BONE')
         
 
-class DATA_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
+class VIEW3D_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
     bl_label = 'Rigify Bone Groups Specials'
 
     def draw(self, context):
@@ -297,12 +310,70 @@ class DATA_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
         layout.operator('armature.rigify_bone_group_remove_all')
 
 
+
+class VIEW3D_PT_gamerig_types(bpy.types.Panel):
+    bl_label = "Rigify Type"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'GameRig'
+
+    @classmethod
+    def poll(cls, context):
+        if not context.object:
+            return False
+        return context.object.type == 'ARMATURE' and context.active_pose_bone\
+               and context.active_object.data.get("rig_id") is None
+
+    def draw(self, context):
+        C = context
+        id_store = C.window_manager
+        bone = context.active_pose_bone
+        rig_name = str(context.active_pose_bone.rigify_type).replace(" ", "")
+
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+
+        # Build types list
+        build_type_list(context, id_store.rigify_types)
+
+        # Rig type field
+        if len(feature_set_list.get_installed_list()) > 0:
+            row = layout.row()
+            row.prop(context.object.data, "active_feature_set")
+        row = layout.row()
+        row.prop_search(bone, "rigify_type", id_store, "rigify_types", text="Rig type")
+
+        # Rig type parameters / Rig type non-exist alert
+        if rig_name != "":
+            try:
+                rig = rig_lists.rigs[rig_name]['module']
+            except (ImportError, AttributeError, KeyError):
+                row = layout.row()
+                box = row.box()
+                box.label(text="ERROR: type \"%s\" does not exist!" % rig_name, icon='ERROR')
+            else:
+                if hasattr(rig.Rig, 'parameters_ui'):
+                    rig = rig.Rig
+                try:
+                    rig.parameters_ui
+                except AttributeError:
+                    col = layout.column()
+                    col.label(text="No options")
+                else:
+                    col = layout.column()
+                    col.label(text="Options:")
+                    box = layout.box()
+                    rig.parameters_ui(box, bone.rigify_parameters)
+
+
 classes = [
     VIEW3D_PT_gamerig_buttons,
-    DATA_PT_gamerig_layer_names,
-    DATA_UL_gamerig_bone_groups,
-    DATA_PT_gamerig_bone_groups,
-    DATA_MT_gamerig_bone_groups_context_menu,
+    VIEW3D_PT_gamerig_types,
+    VIEW3D_PT_gamerig_layer_names,
+    VIEW3D_UL_gamerig_bone_groups,
+    VIEW3D_PT_gamerig_bone_groups,
+    VIEW3D_MT_gamerig_bone_groups_context_menu,
 ]
 
 
