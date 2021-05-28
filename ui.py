@@ -108,7 +108,7 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
 
 
 class VIEW3D_PT_gamerig_layer_names(bpy.types.Panel):
-    bl_label = "Rigify Layer Names"
+    bl_label = "Layer Names"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'GameRig'
@@ -224,7 +224,7 @@ class VIEW3D_PT_gamerig_layer_names(bpy.types.Panel):
             
 
 class VIEW3D_PT_gamerig_bone_groups(bpy.types.Panel):
-    bl_label = "Rigify Bone Groups"
+    bl_label = "Bone Groups"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'GameRig'
@@ -301,7 +301,7 @@ class VIEW3D_UL_gamerig_bone_groups(bpy.types.UIList):
         
 
 class VIEW3D_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
-    bl_label = 'Rigify Bone Groups Specials'
+    bl_label = 'Bone Groups Specials'
 
     def draw(self, context):
         layout = self.layout
@@ -312,7 +312,7 @@ class VIEW3D_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
 
 
 class VIEW3D_PT_gamerig_types(bpy.types.Panel):
-    bl_label = "Rigify Type"
+    bl_label = "Rig Element"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'GameRig'
