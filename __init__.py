@@ -8,7 +8,7 @@ from . import ui
 rigify_info = {
     'name': "GameRig",
     'author': "Armin Halac",
-    'version': (0, 0, 1),
+    'version': (0, 0, 3),
     'blender': (2, 92, 0),
     'description': "Feature set made for game rigs",
     'doc_url': "https://github.com/Arminando/GameRig#readme",
