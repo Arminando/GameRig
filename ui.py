@@ -71,8 +71,12 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
 
             col = layout.column(align=True)
             col.active = (not 'rig_id' in C.object.data)
-
-            if is_game_metarig:
+            generator_override = armature_id_store.gameRig_force_generator
+            if generator_override == 'Rigify':
+                col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
+            elif generator_override == 'GameRig':
+                col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
+            elif is_game_metarig:
                 col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
             else:
                 col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
@@ -367,6 +371,36 @@ class VIEW3D_PT_gamerig_types(bpy.types.Panel):
                     rig.parameters_ui(box, bone.rigify_parameters)
 
 
+class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
+    bl_label = "Preferences"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'GameRig'
+
+    @classmethod
+    def poll(cls, context):
+        if not context.object:
+            return False
+        return context.object.type == 'ARMATURE' and context.active_object.data.get("rig_id") is None
+
+    def draw(self, context):
+        C = context
+        armature_id_store = C.object.data
+        id_store = C.window_manager
+
+
+        layout = self.layout
+        layout.use_property_split = True
+        layout.use_property_decorate = False
+
+        layout.prop(armature_id_store, "gameRig_force_generator", text="Force Generator")
+        layout.separator()
+
+        split = layout.row().split(factor=0.4)
+        split.label(text='')
+        split.operator("script.reload", text="Reload Scripts", icon='FILE_REFRESH')
+        
+
 classes = [
     VIEW3D_PT_gamerig_buttons,
     VIEW3D_PT_gamerig_types,
@@ -374,6 +408,7 @@ classes = [
     VIEW3D_UL_gamerig_bone_groups,
     VIEW3D_PT_gamerig_bone_groups,
     VIEW3D_MT_gamerig_bone_groups_context_menu,
+    VIEW3D_PT_gamerig_preferences,
 ]
 
 

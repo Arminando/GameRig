@@ -1,6 +1,6 @@
 import bpy, os, importlib
 
-from bpy.props import StringProperty
+from bpy.props import EnumProperty
 
 from . import gamerig_generate
 from . import ui
@@ -23,7 +23,7 @@ modules = [
 def register():
 
     # Properties
-    #bpy.types.PoseBone.rigify_associated_def = StringProperty(name = "Associated DEF bone", description = "Utility property used to easily find the DEF bone this ORG bone was duplicated from.")
+    bpy.types.Armature.gameRig_force_generator = EnumProperty(items=(('Auto', 'Auto', 'Do not override'), ('Rigify', 'Rigify', 'Always use default generator'), ('GameRig', 'GameRig', 'Always use GameRig generator')), name='Force Generator')
 
     from bpy.utils import register_class
     for m in modules:
@@ -33,7 +33,7 @@ def register():
 def unregister():
 
     # Properties
-    #del bpy.types.PoseBone.rigify_associated_def
+    del bpy.types.Armature.gameRig_force_generator
     
     from bpy.utils import unregister_class
     for m in reversed(modules):
