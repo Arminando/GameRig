@@ -5,8 +5,9 @@ If you use GameRig and it saves you time or money, or if you would like to acces
 
 # GameRig
 
-GameRig is a so called feature set made for creating game engine compatible rigs using Blender's Rigify system.
-It has been developed for use with Blender 2.92. Other versions might be compatible as well, this needs further testing.
+GameRig is an auto rigging for games addon for Blender.
+It is a so called feature set made for creating game engine compatible rigs using a workflow built on top of the Rigify system.
+The current version has been developed for use with Blender 2.92. Other versions might be compatible as well, this needs further testing. Will soon made sure it works with 2.93.
 
 
 > ## Differences between GameRig and Rigify
