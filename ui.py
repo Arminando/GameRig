@@ -268,7 +268,7 @@ class VIEW3D_PT_gamerig_bone_groups(bpy.types.Panel):
             col.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "normal", text="Colors")
             col = split.column()
             sub = col.row(align=True)
-            sub.enabled = obj.data.rigify_colors_lock  # only custom colors are editable
+            sub.enabled = not obj.data.rigify_colors_lock  # only custom colors are editable
             sub.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "select", text="")
             sub.prop(obj.data.rigify_colors[obj.data.rigify_colors_index], "active", text="")
 
