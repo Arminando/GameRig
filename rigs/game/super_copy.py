@@ -4,6 +4,7 @@ from rigify.rigs.basic.super_copy import Rig as super_copy
 from rigify.rigs.basic.super_copy import create_sample as orig_create_sample
 from rigify.utils.naming import strip_org, make_deformer_name
 from ...utils.bones import BoneUtilityMixin
+from ...utils.space_switch import gameRig_switch_parents
 
 class Rig(BoneUtilityMixin, super_copy):
     """ A "copy" rig.  All it does is duplicate the original bone and
@@ -74,6 +75,8 @@ class Rig(BoneUtilityMixin, super_copy):
             description="Deformation bones will inherit the scale of their ORG bones. Enable this only if you know what you are doing because scale can break your rig in the game engine"
         )
 
+        params.switch_parents = bpy.props.CollectionProperty(type=gameRig_switch_parents)
+
     @classmethod
     def parameters_ui(self, layout, params):
         """ Create the ui for the rig parameters.
@@ -82,6 +85,15 @@ class Rig(BoneUtilityMixin, super_copy):
 
         r = layout.row()
         r.prop(params, "enable_scale")
+        for parent in params.switch_parents:
+            r.label(text=parent.name)
+
+
+    @classmethod
+    def get_space_switch_children(self):
+        """ Return list of names of bones for space switching
+        """
+        return ["bone"]
 
 
 def create_sample(obj):

@@ -4,6 +4,7 @@ from bpy.props import EnumProperty
 
 from . import gamerig_generate
 from . import ui
+from . utils import space_switch
 
 rigify_info = {
     'name': "GameRig",
@@ -15,7 +16,10 @@ rigify_info = {
     'link': "https://github.com/Arminando/GameRig",
 }
 
+
+
 modules = [
+    space_switch,
     gamerig_generate,
     ui,
 ]
