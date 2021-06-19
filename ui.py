@@ -358,23 +358,23 @@ class VIEW3D_PT_gamerig_types(bpy.types.Panel):
                 box.label(text="ERROR: type \"%s\" does not exist!" % rig_name, icon='ERROR')
             else:
                 if hasattr(rig.Rig, 'parameters_ui'):
-                    try:
-                        rig.Rig.parameters_ui
-                    except AttributeError:
-                        col = layout.column()
-                        col.label(text="No options")
-                    else:
-                        col = layout.column()
-                        col.label(text="Options:")
-                        box = layout.box()
-                        rig.Rig.parameters_ui(box, bone.rigify_parameters)
+                    rig = rig.Rig
+                try:
+                    rig.parameters_ui
+                except AttributeError:
+                    col = layout.column()
+                    col.label(text="No options")
+                else:
+                    col = layout.column()
+                    col.label(text="Options:")
+                    box = layout.box()
+                    rig.parameters_ui(box, bone.rigify_parameters)
 
-                if hasattr(rig.Rig, 'get_space_switch_children'):
-                    children = rig.Rig.get_space_switch_children()
+                if hasattr(rig_lists.rigs[rig_name]['module'].Rig, 'get_space_switch_children'):
+                    children = rig_lists.rigs[rig_name]['module'].Rig.get_space_switch_children()
                     col = layout.column()
                     for child in children:
                         col.label(text=child)
-
 
 
 class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
