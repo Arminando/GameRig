@@ -1,8 +1,8 @@
 import bpy
 
 class gameRig_switch_parents(bpy.types.PropertyGroup):
-    name: bpy.props.StringProperty(name="Name", default="",description="The name of the parent")
-    position: bpy.props.IntProperty(name="Position",description="The index of the position in switch list")
+    name: bpy.props.StringProperty(name="Name", default="test",description="The name of the parent")
+    position: bpy.props.IntProperty(name="Position", description="The index of the position in switch list")
     default: bpy.props.BoolProperty(default=False, name='Is Default', description="Will this be the default parent")
 
 

@@ -85,8 +85,9 @@ class Rig(BoneUtilityMixin, super_copy):
 
         r = layout.row()
         r.prop(params, "enable_scale")
+        col = layout.column()
         for parent in params.switch_parents:
-            r.label(text=parent.name)
+            col.label(text=parent.name)
 
 
     @classmethod
