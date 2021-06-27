@@ -399,7 +399,7 @@ class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
         layout.use_property_split = True
         layout.use_property_decorate = False
 
-        layout.prop(armature_id_store, "gameRig_force_generator", text="Force Generator")
+        layout.prop(armature_id_store, "gameRig_force_generator", text="Force Generator", expand=True)
         layout.separator()
 
         split = layout.row().split(factor=0.4)
