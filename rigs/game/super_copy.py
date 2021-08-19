@@ -63,9 +63,10 @@ class Rig(BoneUtilityMixin, super_copy):
                 self.make_constraint(bones.deform, 'COPY_ROTATION', bones.org)
 
     def configure_bones(self):
-        controls = {'ctrl': [self.bones.ctrl]}
-        self.remove_quat_rot_mode(controls)
-    
+        if self.bones.ctrl:
+            controls = {'ctrl': [self.bones.ctrl]}
+            self.remove_quat_rot_mode(controls)
+        
 
 
     @classmethod
