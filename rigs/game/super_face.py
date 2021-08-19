@@ -1,6 +1,7 @@
 import bpy
 
 from rigify.rigs.faces.super_face import Rig as old_super_face
+from rigify.rigs.faces.super_face import script
 from rigify.utils.layers import ControlLayersOption
 from rigify.utils.naming import org, deformer, strip_org, make_deformer_name, strip_def
 from rigify.utils.bones import copy_bone
@@ -10,6 +11,40 @@ from ...utils.bones import BoneUtilityMixin
 
 class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 
+
+    def generate(self):
+
+        self.orient_org_bones()
+        all_bones, tweak_unique = self.create_bones()
+        self.parent_bones(all_bones, tweak_unique)
+        self.constraints(all_bones)
+        jaw_prop, eyes_prop = self.drivers_and_props(all_bones)
+
+
+        # Create UI
+        all_controls = []
+        all_controls += [ bone for bone in [ bgroup for bgroup in [ all_bones['ctrls'][group] for group in list( all_bones['ctrls'].keys() ) ] ] ]
+        all_controls += [ bone for bone in [ bgroup for bgroup in [ all_bones['tweaks'][group] for group in list( all_bones['tweaks'].keys() ) ] ] ]
+
+        all_ctrls = []
+        for group in all_controls:
+            for bone in group:
+                all_ctrls.append( bone )
+
+        controls_string = ", ".join(["'" + x + "'" for x in all_ctrls])
+        self.remove_quat_rot_mode({'ctrls': all_ctrls})
+
+        return [ script % (
+            controls_string,
+            all_bones['ctrls']['jaw'][0],
+            all_bones['ctrls']['eyes'][2],
+            jaw_prop,
+            eyes_prop )
+            ]
+
+        # for key in all_controls:
+        #     print(key)
+        #     self.remove_quat_rot_mode(key)
 
     def parent_bones(self, all_bones, tweak_unique):
         super().parent_bones(all_bones, tweak_unique)
