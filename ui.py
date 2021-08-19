@@ -370,11 +370,12 @@ class VIEW3D_PT_gamerig_types(bpy.types.Panel):
                     box = layout.box()
                     rig.parameters_ui(box, bone.rigify_parameters)
 
-                if hasattr(rig_lists.rigs[rig_name]['module'].Rig, 'get_space_switch_children'):
-                    children = rig_lists.rigs[rig_name]['module'].Rig.get_space_switch_children()
-                    col = layout.column()
-                    for child in children:
-                        col.label(text=child)
+                # WIP of new space switch system, ignore it
+                # if hasattr(rig_lists.rigs[rig_name]['module'].Rig, 'get_space_switch_children'):
+                #     children = rig_lists.rigs[rig_name]['module'].Rig.get_space_switch_children()
+                #     col = layout.column()
+                #     for child in children:
+                #         col.label(text=child)
 
 
 class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):

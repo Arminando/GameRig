@@ -90,9 +90,10 @@ class Rig(BoneUtilityMixin, super_copy):
 
         r = layout.row()
         r.prop(params, "enable_scale")
-        col = layout.column()
-        for parent in params.switch_parents:
-            col.label(text=parent.name)
+        # WIP of a new space switch system test, ignore it
+        # col = layout.column()
+        # for parent in params.switch_parents:
+        #     col.label(text=parent.name)
 
 
     @classmethod
