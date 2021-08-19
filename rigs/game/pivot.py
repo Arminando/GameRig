@@ -54,6 +54,11 @@ class Rig(BoneUtilityMixin, pivot):
             self.clean_def_hierarchy(self.bones.deform)
 
 
+    def configure_bones(self):
+        super().configure_bones()
+        self.remove_quat_rot_mode(self.bones.ctrl)
+
+
 
     def rig_bones(self):
         super().rig_bones()
