@@ -54,10 +54,6 @@ class BaseLimbRig(BoneUtilityMixin, old_BaseLimbRig):
                 self.make_constraint(deform, 'COPY_LOCATION', entry.org)
                 self.make_constraint(deform, 'COPY_ROTATION', entry.org)
 
-    @stage.configure_bones
-    def set_control_orientations(self):
-        self.remove_quat_rot_mode(self.bones.ctrl)
-
     @classmethod
     def parameters_ui(self, layout, params):
         """ Create the ui for the rig parameters.

@@ -1,12 +1,12 @@
 import bpy
 
-from rigify.utils.bones import new_bone
-from rigify.generate import Generator, get_xy_spread
+from rigify.generate import Generator
 from rigify.utils.rig import get_rigify_type
-from rigify.utils.naming import make_original_name, ROOT_NAME
+from rigify.utils.naming import make_original_name
 from rigify.ui import rigify_report_exception
 from rigify.utils.errors import MetarigError
 
+ROOT_NAME = "world"
 
 class Generator_gamerig(Generator):
 
@@ -31,29 +31,6 @@ class Generator_gamerig(Generator):
                 original_bones[i] = bone.name
 
         self.original_bones = original_bones
-
-    
-    def  _Generator__create_root_bone(self):
-        obj = self.obj
-        metarig = self.metarig
-
-        #----------------------------------
-        # Create the root bone.
-        root_bone = new_bone(obj, ROOT_NAME)
-        spread = get_xy_spread(metarig.data.bones) or metarig.data.bones[0].length
-        spread = float('%.3g' % spread)
-        scale = spread/0.589
-        obj.data.edit_bones[root_bone].head = (0, 0, 0)
-        obj.data.edit_bones[root_bone].tail = (0, scale, 0)
-        obj.data.edit_bones[root_bone].roll = 0
-        self.root_bone = root_bone
-        self.bone_owners[root_bone] = None
-
-        # Only this line changed. The rest is a straight copy from Generator
-        bpy.ops.object.mode_set(mode='POSE')
-        obj.pose.bones[root_bone].rotation_mode = 'XYZ'
-        bpy.ops.object.mode_set(mode='EDIT')
-
 
 
         

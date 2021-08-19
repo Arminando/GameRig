@@ -33,19 +33,3 @@ class BoneUtilityMixin(BoneUtilityMixin):
         eb = self.obj.data.edit_bones
         bone = eb[bone_name]
         bone.parent = None
-
-    
-    def remove_quat_rot_mode(self, controls: dict):
-        for key in controls:
-            item = controls[key]
-
-            if isinstance(item, dict):
-                self.remove_quat_rot_mode(item)
-            else:
-                if isinstance(item, str):
-                    item = [item]
-
-                for bone in item:
-                    bone_obj = self.get_bone(bone)
-                    if bone_obj.rotation_mode == 'QUATERNION':
-                        bone_obj.rotation_mode = 'XYZ'
