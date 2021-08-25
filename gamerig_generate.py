@@ -9,11 +9,12 @@ from rigify.utils.errors import MetarigError
 
 
 class Generator_gamerig(Generator):
-
-    def __init__(self, context, metarig):
-        super().__init__(context, metarig)
-        if not metarig.data.rigify_rig_basename:
-            metarig.data.rigify_rig_basename = "Armature"
+    
+    # Removing this for now as it creates an error if the metarig is called 'Armature'
+    # def __init__(self, context, metarig):
+    #     super().__init__(context, metarig)
+    #     if not metarig.data.rigify_rig_basename:
+    #         metarig.data.rigify_rig_basename = "Armature"
 
     # Added this just to make game.raw_copy work, which is identical to raw_copy
     def _Generator__rename_org_bones(self, obj):
