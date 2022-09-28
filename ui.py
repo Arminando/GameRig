@@ -3,8 +3,10 @@ import addon_utils
 
 from rigify import rig_lists
 from rigify.utils.errors import MetarigError
+from rigify.utils.rig import upgradeMetarigTypes, outdated_types
 from rigify.ui import build_type_list
 from rigify import feature_set_list
+from rigify.ui import DATA_PT_rigify_advanced, DATA_PT_rigify_samples
 
 from .gamerig_generate import generate_rig
 from .utils.ui import is_gamerig_metarig
@@ -30,7 +32,7 @@ def draw_gamerig_generate_settings(self, context):
     #for adding custom UI stuff after the Generate Button
 
 
-class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
+class VIEW3D_PT_gamerig(bpy.types.Panel):
     bl_label = "GameRig"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -52,63 +54,101 @@ class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
         layout.use_property_split = True
         layout.use_property_decorate = False
 
-        if obj.mode in {'POSE', 'OBJECT'}:
-            armature_id_store = C.object.data
 
-            has_non_game_rigs = False
-            is_game_metarig = is_gamerig_metarig(obj)
+        WARNING = "Warning: Some features may change after generation"
+        show_warning = False
+        show_update_metarig = False
+        show_not_updatable = False
+        show_upgrade_face = False
 
-            for b in obj.pose.bones:
-                if b.rigify_type and "game" not in b.rigify_type:
-                    has_non_game_rigs = True
+        check_props = ['IK_follow', 'root/parent', 'FK_limb_follow', 'IK_Stretch']
+
+        for posebone in obj.pose.bones:
+            bone = posebone.bone
+            if not bone:
+                # If we are in edit mode and the bone was just created,
+                # a pose bone won't exist yet.
+                continue
+            if bone.layers[30] and (list(set(posebone.keys()) & set(check_props))):
+                show_warning = True
+                break
+
+        for b in obj.pose.bones:
+            if b.rigify_type in outdated_types.keys():
+                old_bone = b.name
+                old_rig = b.rigify_type
+                if outdated_types[b.rigify_type]:
+                    show_update_metarig = True
+                else:
+                    show_update_metarig = False
+                    show_not_updatable = True
                     break
+            elif b.rigify_type == 'faces.super_face':
+                show_upgrade_face = True
 
-            if has_non_game_rigs and is_game_metarig:
-                layout.label(text="Non Game types detected", icon='ERROR')
+        if show_warning:
+            layout.label(text=WARNING, icon='ERROR')
 
-            row = layout.row()
-            # Rig type field
+        enable_generate = not (show_not_updatable or show_update_metarig)
 
-            col = layout.column(align=True)
-            col.active = (not 'rig_id' in C.object.data)
-            generator_override = armature_id_store.gameRig_force_generator
-            if generator_override == 'Rigify':
-                col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
-            elif generator_override == 'GameRig':
-                col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
-            elif is_game_metarig:
-                col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
-            else:
-                col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
+        if show_not_updatable:
+            layout.label(text="WARNING: This metarig contains deprecated rigify rig-types and cannot be upgraded automatically.", icon='ERROR')
+            layout.label(text="("+old_rig+" on bone "+old_bone+")")
+        elif show_update_metarig:
+            layout.label(text="This metarig contains old rig-types that can be automatically upgraded to benefit of rigify's new features.", icon='ERROR')
+            layout.label(text="("+old_rig+" on bone "+old_bone+")")
+            layout.operator("pose.rigify_upgrade_types", text="Upgrade Metarig")
+        elif show_upgrade_face:
+            layout.label(text="This metarig uses the old face rig.", icon='INFO')
+            layout.operator("pose.rigify_upgrade_face")
 
-            col = layout.column(align=True)
-            col.separator()
-            row = col.row(align=True)
-            row.prop(armature_id_store, "rigify_generate_mode", expand=True, text="Mode")
 
-            col = layout.column()
-            col.prop(armature_id_store, "rigify_rig_basename", text="Rig Name", icon="SORTALPHA")
-            if armature_id_store.rigify_generate_mode == "overwrite":
-                col.prop(armature_id_store, "rigify_target_rig", text="Target Rig")
-                col.prop(armature_id_store, "rigify_rig_ui", text="Target UI", icon='TEXT')
-                col.prop(armature_id_store, "rigify_force_widget_update")
 
-        elif obj.mode == 'EDIT':
-            # Build types list
-            build_type_list(context, id_store.rigify_types)
 
-            if id_store.rigify_active_type > len(id_store.rigify_types):
-                id_store.rigify_active_type = 0
 
-            # Rig type list
-            if len(feature_set_list.get_installed_list()) > 0:
-                col = layout.column()
-                col.prop(context.object.data, "active_feature_set")
+        armature_id_store = C.object.data
 
-            col.template_list("UI_UL_list", "rigify_types", id_store, "rigify_types", id_store, 'rigify_active_type')
+        has_non_game_rigs = False
+        is_game_metarig = is_gamerig_metarig(obj)
 
-            props = layout.operator("armature.metarig_sample_add", text="Add sample")
-            props.metarig_type = id_store.rigify_types[id_store.rigify_active_type].name
+        for b in obj.pose.bones:
+            if b.rigify_type and "game" not in b.rigify_type:
+                has_non_game_rigs = True
+                break
+
+        if has_non_game_rigs and is_game_metarig:
+            layout.label(text="Non Game types detected", icon='ERROR')
+
+        row = layout.row()
+        # Rig type field
+
+        col = layout.column(align=True)
+        col.active = (not 'rig_id' in C.object.data)
+        generator_override = armature_id_store.gameRig_force_generator
+        if generator_override == 'Rigify':
+            col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
+        elif generator_override == 'GameRig':
+            col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
+        elif is_game_metarig:
+            col.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
+        else:
+            col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
+
+
+class DATA_PT_gamerig_advanced(DATA_PT_rigify_advanced):
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = "data"
+    bl_label = "Advanced"
+    bl_parent_id = 'VIEW3D_PT_gamerig'
+
+
+class DATA_PT_gamerig_samples(DATA_PT_rigify_samples):
+    bl_label = "Samples"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = "data"
+    bl_parent_id = "VIEW3D_PT_gamerig"
 
 
 class VIEW3D_PT_gamerig_layer_names(bpy.types.Panel):
@@ -116,7 +156,6 @@ class VIEW3D_PT_gamerig_layer_names(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'GameRig'
-    bl_options = {'DEFAULT_CLOSED'}
 
     @classmethod
     def poll(cls, context):
@@ -409,7 +448,9 @@ class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
         
 
 classes = [
-    VIEW3D_PT_gamerig_buttons,
+    VIEW3D_PT_gamerig,
+    DATA_PT_gamerig_advanced,
+    DATA_PT_gamerig_samples,
     VIEW3D_PT_gamerig_types,
     VIEW3D_PT_gamerig_layer_names,
     VIEW3D_UL_gamerig_bone_groups,
@@ -422,7 +463,7 @@ classes = [
 def register():
     from bpy.utils import register_class
 
-    bpy.types.DATA_PT_rigify_buttons.prepend(draw_gamerig_rigify_button)
+    bpy.types.DATA_PT_rigify.prepend(draw_gamerig_rigify_button)
 
     # Classes.
     for c in classes:
