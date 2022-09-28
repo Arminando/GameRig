@@ -10,7 +10,7 @@ from rigify.ui import DATA_PT_rigify_advanced, DATA_PT_rigify_samples
 
 from .gamerig_generate import generate_rig
 from .utils.ui import is_gamerig_metarig
-
+from . import base_rig
 
 def draw_gamerig_rigify_button(self, context):
     layout = self.layout
@@ -354,8 +354,8 @@ class VIEW3D_MT_gamerig_bone_groups_context_menu(bpy.types.Menu):
 
 
 
-class VIEW3D_PT_gamerig_types(bpy.types.Panel):
-    bl_label = "Rig Element"
+class VIEW3D_PT_gamerig_buttons(bpy.types.Panel):
+    bl_label = "Rig Type"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'GameRig'
@@ -381,7 +381,7 @@ class VIEW3D_PT_gamerig_types(bpy.types.Panel):
         build_type_list(context, id_store.rigify_types)
 
         # Rig type field
-        if len(feature_set_list.get_installed_list()) > 0:
+        if len(feature_set_list.get_enabled_modules_names()) > 0:
             row = layout.row()
             row.prop(context.object.data, "active_feature_set")
         row = layout.row()
@@ -398,23 +398,24 @@ class VIEW3D_PT_gamerig_types(bpy.types.Panel):
             else:
                 if hasattr(rig.Rig, 'parameters_ui'):
                     rig = rig.Rig
+
                 try:
-                    rig.parameters_ui
+                    param_cb = rig.parameters_ui
+
+                    # Ignore the known empty base method
+                    if getattr(param_cb, '__func__', None) == base_rig.BaseRig.parameters_ui.__func__:
+                        param_cb = None
                 except AttributeError:
+                    param_cb = None
+
+                if param_cb is None:
                     col = layout.column()
                     col.label(text="No options")
                 else:
                     col = layout.column()
                     col.label(text="Options:")
                     box = layout.box()
-                    rig.parameters_ui(box, bone.rigify_parameters)
-
-                # WIP of new space switch system, ignore it
-                # if hasattr(rig_lists.rigs[rig_name]['module'].Rig, 'get_space_switch_children'):
-                #     children = rig_lists.rigs[rig_name]['module'].Rig.get_space_switch_children()
-                #     col = layout.column()
-                #     for child in children:
-                #         col.label(text=child)
+                    param_cb(box, bone.rigify_parameters)
 
 
 class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
@@ -451,7 +452,7 @@ classes = [
     VIEW3D_PT_gamerig,
     DATA_PT_gamerig_advanced,
     DATA_PT_gamerig_samples,
-    VIEW3D_PT_gamerig_types,
+    VIEW3D_PT_gamerig_buttons,
     VIEW3D_PT_gamerig_layer_names,
     VIEW3D_UL_gamerig_bone_groups,
     VIEW3D_PT_gamerig_bone_groups,
