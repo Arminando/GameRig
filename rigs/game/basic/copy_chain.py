@@ -2,7 +2,7 @@ import bpy
 
 from itertools import count
 
-from ..chain_rigs import SimpleChainRig
+from ...chain_rigs import SimpleChainRig
 from rigify.base_rig import stage
 from rigify.rigs.basic.copy_chain import Rig as copy_chain
 from rigify.rigs.basic.copy_chain import create_sample as orig_create_sample

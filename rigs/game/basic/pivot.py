@@ -3,7 +3,7 @@ import bpy
 from rigify.rigs.basic.pivot import Rig as pivot
 from rigify.rigs.basic.pivot import create_sample as orig_create_sample
 from rigify.utils.naming import make_derived_name
-from ...utils.bones import BoneUtilityMixin
+from ....utils.bones import BoneUtilityMixin
 
 
 class Rig(BoneUtilityMixin, pivot):

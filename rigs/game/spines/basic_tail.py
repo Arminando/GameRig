@@ -1,7 +1,7 @@
 import bpy
 
 from rigify.rigs.spines.basic_tail import Rig as basic_tail
-from ..spine_rigs import BaseHeadTailRig
+from .spine_rigs import BaseHeadTailRig
 
 class Rig(BaseHeadTailRig, basic_tail):
 

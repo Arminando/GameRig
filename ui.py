@@ -135,7 +135,7 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
             col.operator("pose.rigify_generate", text="Generate Rig", icon='POSE_HLT')
 
 
-class DATA_PT_gamerig_advanced(DATA_PT_rigify_advanced):
+class VIEW3D_PT_gamerig_advanced(DATA_PT_rigify_advanced):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_context = "data"
@@ -143,11 +143,10 @@ class DATA_PT_gamerig_advanced(DATA_PT_rigify_advanced):
     bl_parent_id = 'VIEW3D_PT_gamerig'
 
 
-class DATA_PT_gamerig_samples(DATA_PT_rigify_samples):
+class VIEW3D_PT_gamerig_samples(DATA_PT_rigify_samples):
     bl_label = "Samples"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_context = "data"
     bl_parent_id = "VIEW3D_PT_gamerig"
 
 
@@ -450,8 +449,8 @@ class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
 
 classes = [
     VIEW3D_PT_gamerig,
-    DATA_PT_gamerig_advanced,
-    DATA_PT_gamerig_samples,
+    VIEW3D_PT_gamerig_advanced,
+    VIEW3D_PT_gamerig_samples,
     VIEW3D_PT_gamerig_buttons,
     VIEW3D_PT_gamerig_layer_names,
     VIEW3D_UL_gamerig_bone_groups,

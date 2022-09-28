@@ -1,6 +1,6 @@
 import bpy
 
-from .chain_rigs import TweakChainRig, ConnectingChainRig
+from ...chain_rigs import TweakChainRig, ConnectingChainRig
 
 class BaseSpineRig(TweakChainRig):
 

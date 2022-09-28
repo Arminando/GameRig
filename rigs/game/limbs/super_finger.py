@@ -1,7 +1,7 @@
 import bpy
 
 from rigify.rigs.limbs.super_finger import Rig as old_super_finger
-from ..chain_rigs import SimpleChainRig
+from ...chain_rigs import SimpleChainRig
 
 class Rig(SimpleChainRig, old_super_finger):
 

@@ -7,7 +7,7 @@ from rigify.utils.naming import org, deformer, strip_org, make_deformer_name, st
 from rigify.utils.bones import copy_bone
 from rigify.utils.mechanism import MechanismUtilityMixin, move_constraint
 
-from ...utils.bones import BoneUtilityMixin
+from ....utils.bones import BoneUtilityMixin
 
 class Rig(BoneUtilityMixin, old_super_face, MechanismUtilityMixin):
 

@@ -1,10 +1,11 @@
+from . import arm, leg
 import bpy
 
 from rigify.base_generate import SubstitutionRig
 
-from ..limb_rigs import BaseLimbRig
+from .limb_rigs import BaseLimbRig
 
-from . import arm, leg, paw
+from . import paw
 
 
 RIGS = { 'arm': arm.Rig, 'leg': leg.Rig, 'paw': paw.Rig }

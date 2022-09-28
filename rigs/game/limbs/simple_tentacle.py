@@ -2,7 +2,7 @@ import bpy
 
 from rigify.rigs.limbs.simple_tentacle import Rig as old_simple_tentacle
 from rigify.rigs.limbs.simple_tentacle import create_sample as orig_create_sample
-from ..chain_rigs import TweakChainRig
+from ...chain_rigs import TweakChainRig
 
 class Rig(TweakChainRig, old_simple_tentacle):
     

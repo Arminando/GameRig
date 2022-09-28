@@ -1,6 +1,6 @@
 import bpy
 
-from ...utils.bones import BoneUtilityMixin
+from ....utils.bones import BoneUtilityMixin
 
 from rigify.base_rig import stage
 from rigify.rigs.limbs.super_palm import Rig as old_super_palm

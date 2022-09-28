@@ -2,7 +2,7 @@ import bpy
 
 from rigify.rigs.spines.basic_spine import Rig as basic_spine
 from rigify.rigs.spines.basic_spine import create_sample as orig_create_sample
-from ..spine_rigs import BaseSpineRig
+from .spine_rigs import BaseSpineRig
 
 
 class Rig(BaseSpineRig, basic_spine):

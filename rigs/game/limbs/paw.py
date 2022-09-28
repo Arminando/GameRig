@@ -2,7 +2,7 @@ import bpy
 
 from rigify.rigs.limbs.paw import Rig as paw
 from rigify.rigs.limbs.paw import create_sample as orig_create_sample
-from ..limb_rigs import BaseLimbRig
+from .limb_rigs import BaseLimbRig
 
 class Rig(BaseLimbRig, paw):
     pass

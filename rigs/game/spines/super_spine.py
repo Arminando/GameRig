@@ -1,3 +1,4 @@
+from . import basic_spine, basic_tail
 import bpy
 
 from rigify.utils.rig import connected_children_names
@@ -6,7 +7,7 @@ from rigify.utils.bones import BoneUtilityMixin, flip_bone_chain
 
 from rigify.base_generate import SubstitutionRig
 
-from . import basic_spine, basic_tail, super_head
+from . import super_head
 
 
 class Rig(SubstitutionRig, BoneUtilityMixin):

@@ -3,8 +3,8 @@ import bpy
 from rigify.rigs.basic.super_copy import Rig as super_copy
 from rigify.rigs.basic.super_copy import create_sample as orig_create_sample
 from rigify.utils.naming import strip_org, make_deformer_name
-from ...utils.bones import BoneUtilityMixin
-from ...utils.space_switch import gameRig_switch_parents
+from ....utils.bones import BoneUtilityMixin
+from ....utils.space_switch import gameRig_switch_parents
 
 class Rig(BoneUtilityMixin, super_copy):
     """ A "copy" rig.  All it does is duplicate the original bone and
