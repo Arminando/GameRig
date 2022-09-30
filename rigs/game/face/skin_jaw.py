@@ -12,9 +12,14 @@ class Rig(BaseSkinRig, skin_jaw):
     @stage.parent_bones
     def parent_deform_chain(self):
         deform = self.bones.deform
-        # self.set_bone_parent(deform.master, self.bones.org)
+        self.set_bone_parent(deform.master, self.get_bone_parent(self.bones.org))
         
         self.clean_def_hierarchy(deform.master)
+
+    @stage.rig_bones
+    def rig_deform_chain(self):
+        self.make_constraint(self.bones.deform.master, 'COPY_LOCATION', self.bones.org)
+        self.make_constraint(self.bones.deform.master, 'COPY_ROTATION', self.bones.org)
 
 def create_sample(obj):
     bones = old_create_sample(obj)
