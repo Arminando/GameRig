@@ -477,34 +477,6 @@ def create(obj):
     bone.use_connect = False
     bone.parent = arm.edit_bones[bones['head']]
     bones['eye.R'] = bone.name
-    bone = arm.edit_bones.new('n_feather.001.L')
-    bone.head = 0.0098, -0.0390, 0.1566
-    bone.tail = 0.0131, -0.0247, 0.1430
-    bone.roll = -0.0380
-    bone.use_connect = False
-    bone.parent = arm.edit_bones[bones['head']]
-    bones['n_feather.001.L'] = bone.name
-    bone = arm.edit_bones.new('n_feather.001.R')
-    bone.head = -0.0098, -0.0390, 0.1566
-    bone.tail = -0.0131, -0.0247, 0.1430
-    bone.roll = 0.0380
-    bone.use_connect = False
-    bone.parent = arm.edit_bones[bones['head']]
-    bones['n_feather.001.R'] = bone.name
-    bone = arm.edit_bones.new('skull.006.L')
-    bone.head = 0.0033, -0.0587, 0.1538
-    bone.tail = 0.0162, -0.0666, 0.1509
-    bone.roll = 1.6532
-    bone.use_connect = False
-    bone.parent = arm.edit_bones[bones['head']]
-    bones['skull.006.L'] = bone.name
-    bone = arm.edit_bones.new('skull.006.R')
-    bone.head = -0.0033, -0.0587, 0.1538
-    bone.tail = -0.0162, -0.0666, 0.1509
-    bone.roll = -1.6532
-    bone.use_connect = False
-    bone.parent = arm.edit_bones[bones['head']]
-    bones['skull.006.R'] = bone.name
     bone = arm.edit_bones.new('w_feather.001.R')
     bone.head = -0.1595, -0.0062, 0.1163
     bone.tail = -0.2489, -0.0055, 0.1224
@@ -697,7 +669,7 @@ def create(obj):
 
     bpy.ops.object.mode_set(mode='OBJECT')
     pbone = obj.pose.bones[bones['char_root']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -709,7 +681,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['spine.003']]
-    pbone.rigify_type = 'game.basic_spine'
+    pbone.rigify_type = 'game.spines.basic_spine'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -729,7 +701,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['spine.002']]
-    pbone.rigify_type = 'game.basic_tail'
+    pbone.rigify_type = 'game.spines.basic_tail'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -773,39 +745,23 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['pelvis.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = ''
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
     pbone.lock_scale = (False, False, False)
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    try:
-        pbone.rigify_parameters.make_control = False
-    except AttributeError:
-        pass
     pbone = obj.pose.bones[bones['pelvis.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = ''
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
     pbone.lock_scale = (False, False, False)
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_control = False
-    except AttributeError:
-        pass
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
     pbone = obj.pose.bones[bones['thigh.L']]
-    pbone.rigify_type = 'game.super_limb'
+    pbone.rigify_type = 'game.limbs.super_limb'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -825,7 +781,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['thigh.R']]
-    pbone.rigify_type = 'game.super_limb'
+    pbone.rigify_type = 'game.limbs.super_limb'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -853,7 +809,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['shoulder.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -873,7 +829,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['shoulder.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -901,7 +857,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['t_feather.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -913,7 +869,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_feather.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -925,7 +881,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['Wing.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -941,7 +897,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['neck.001']]
-    pbone.rigify_type = 'game.super_head'
+    pbone.rigify_type = 'game.spines.super_head'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -957,7 +913,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['Wing.R']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -997,7 +953,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['w_feather.004.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1025,7 +981,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['w_feather.004.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1061,7 +1017,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['w_feather.003.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1089,7 +1045,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['w_feather.003.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1109,7 +1065,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['t_thumb.001.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1129,7 +1085,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['t_thumb.001.R']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1141,7 +1097,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['w_feather.001.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1153,7 +1109,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['w_feather.002.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1165,7 +1121,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['beak.001.T']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1173,7 +1129,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['beak_001.B']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1181,7 +1137,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['eye.L']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1193,7 +1149,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['eye.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1202,66 +1158,10 @@ def create(obj):
     pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     try:
         pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    pbone = obj.pose.bones[bones['n_feather.001.L']]
-    pbone.rigify_type = 'game.super_copy'
-    pbone.lock_location = (False, False, False)
-    pbone.lock_rotation = (False, False, False)
-    pbone.lock_rotation_w = False
-    pbone.lock_scale = (False, False, False)
-    pbone.rotation_mode = 'QUATERNION'
-    pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    pbone = obj.pose.bones[bones['n_feather.001.R']]
-    pbone.rigify_type = 'game.super_copy'
-    pbone.lock_location = (False, False, False)
-    pbone.lock_rotation = (False, False, False)
-    pbone.lock_rotation_w = False
-    pbone.lock_scale = (False, False, False)
-    pbone.rotation_mode = 'QUATERNION'
-    pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    pbone = obj.pose.bones[bones['skull.006.L']]
-    pbone.rigify_type = 'game.super_copy'
-    pbone.lock_location = (False, False, False)
-    pbone.lock_rotation = (False, False, False)
-    pbone.lock_rotation_w = False
-    pbone.lock_scale = (False, False, False)
-    pbone.rotation_mode = 'QUATERNION'
-    pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    try:
-        pbone.rigify_parameters.make_control = False
-    except AttributeError:
-        pass
-    pbone = obj.pose.bones[bones['skull.006.R']]
-    pbone.rigify_type = 'game.super_copy'
-    pbone.lock_location = (False, False, False)
-    pbone.lock_rotation = (False, False, False)
-    pbone.lock_rotation_w = False
-    pbone.lock_scale = (False, False, False)
-    pbone.rotation_mode = 'QUATERNION'
-    pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-    try:
-        pbone.rigify_parameters.make_widget = False
-    except AttributeError:
-        pass
-    try:
-        pbone.rigify_parameters.make_control = False
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['w_feather.001.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1273,7 +1173,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['w_feather.002.R']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1285,7 +1185,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_ring.001.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1297,7 +1197,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_index.001.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1309,7 +1209,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_middle.001.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1329,7 +1229,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['t_ring.001.R']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1341,7 +1241,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_index.001.R']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1353,7 +1253,7 @@ def create(obj):
     except AttributeError:
         pass
     pbone = obj.pose.bones[bones['t_middle.001.R']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.basic.copy_chain'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False
@@ -1389,7 +1289,7 @@ def create(obj):
     pbone.rotation_mode = 'QUATERNION'
     pbone.bone.layers = [True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     pbone = obj.pose.bones[bones['tongue.001.L']]
-    pbone.rigify_type = 'game.simple_tentacle'
+    pbone.rigify_type = 'game.face.basic_tongue'
     pbone.lock_location = (False, False, False)
     pbone.lock_rotation = (False, False, False)
     pbone.lock_rotation_w = False

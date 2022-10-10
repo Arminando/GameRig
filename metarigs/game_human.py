@@ -163,11 +163,18 @@ def create(obj):
 
     bones = {}
 
+    bone = arm.edit_bones.new('char_root')
+    bone.head = 0.0000, 0.0000, 0.0000
+    bone.tail = 0.0000, 0.2500, 0.0000
+    bone.roll = 0.0000
+    bone.use_connect = False
+    bones['char_root'] = bone.name
     bone = arm.edit_bones.new('spine')
     bone.head = 0.0000, 0.0552, 1.0099
     bone.tail = 0.0000, 0.0172, 1.1573
     bone.roll = 0.0000
     bone.use_connect = False
+    bone.parent = arm.edit_bones[bones['char_root']]
     bones['spine'] = bone.name
     bone = arm.edit_bones.new('spine.001')
     bone.head = 0.0000, 0.0172, 1.1573
@@ -1361,6 +1368,22 @@ def create(obj):
     bones['f_pinky.03.R'] = bone.name
 
     bpy.ops.object.mode_set(mode='OBJECT')
+    pbone = obj.pose.bones[bones['char_root']]
+    pbone.rigify_type = 'game.basic.super_copy'
+    pbone.lock_location = (False, False, False)
+    pbone.lock_rotation = (False, False, False)
+    pbone.lock_rotation_w = False
+    pbone.lock_scale = (False, False, False)
+    pbone.rotation_mode = 'QUATERNION'
+    pbone.bone.layers = [True, True, True, True, False, True, False, True, False, False, True, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+    try:
+        pbone.rigify_parameters.super_copy_widget_type = "diamond"
+    except AttributeError:
+        pass
+    try:
+        pbone.rigify_parameters.make_deform = True
+    except AttributeError:
+        pass
     pbone = obj.pose.bones[bones['spine']]
     pbone.rigify_type = 'game.spines.basic_spine'
     pbone.lock_location = (False, False, False)
