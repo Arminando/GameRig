@@ -60,6 +60,7 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
         show_update_metarig = False
         show_not_updatable = False
         show_upgrade_face = False
+        show_upgrade_game_face = False
 
         check_props = ['IK_follow', 'root/parent', 'FK_limb_follow', 'IK_Stretch']
 
@@ -85,6 +86,8 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
                     break
             elif b.rigify_type == 'faces.super_face':
                 show_upgrade_face = True
+            elif b.rigify_type == 'game.faces.super_face':
+                show_upgrade_game_face = True
 
         if show_warning:
             layout.label(text=WARNING, icon='ERROR')
@@ -101,7 +104,9 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
         elif show_upgrade_face:
             layout.label(text="This metarig uses the old face rig.", icon='INFO')
             layout.operator("pose.rigify_upgrade_face")
-
+        elif show_upgrade_game_face:
+            layout.label(text="This metarig uses the old game face rig.", icon='INFO')
+            layout.operator("pose.gamerig_upgrade_game_face")
 
 
 

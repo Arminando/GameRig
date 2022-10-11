@@ -4,6 +4,7 @@ from bpy.props import EnumProperty
 
 from . import gamerig_generate
 from . import ui
+from . import operators
 from . utils import space_switch
 
 rigify_info = {
@@ -21,6 +22,7 @@ rigify_info = {
 modules = [
     space_switch,
     gamerig_generate,
+    operators,
     ui,
 ]
 

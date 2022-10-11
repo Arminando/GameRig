@@ -1,10 +1,10 @@
 import bpy
 
-from rigify.utils.bones import BoneUtilityMixin
+from rigify.utils.bones import BoneUtilityMixin as old_BoneUtilityMixin
 from rigify.utils.naming import choose_derived_bone
 
 
-class BoneUtilityMixin(BoneUtilityMixin):
+class BoneUtilityMixin(old_BoneUtilityMixin):
 
     def clean_def_hierarchy(self, bone_name):
         old_parent = self.get_bone_parent(bone_name)
