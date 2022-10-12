@@ -6,6 +6,7 @@ import importlib
 # Submodules to load during register
 submodules = (
     'upgrade_face',
+    'upgrade_metarig_types'
 )
 
 loaded_submodules = []

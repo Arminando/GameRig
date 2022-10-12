@@ -11,6 +11,7 @@ from rigify.ui import DATA_PT_rigify_advanced, DATA_PT_rigify_samples
 from .gamerig_generate import generate_rig
 from .utils.ui import is_gamerig_metarig
 from . import base_rig
+from .operators.upgrade_metarig_types import outdated_types as outdated_game_types
 
 def draw_gamerig_rigify_button(self, context):
     layout = self.layout
@@ -61,6 +62,7 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
         show_not_updatable = False
         show_upgrade_face = False
         show_upgrade_game_face = False
+        show_upgrade_game_types = False
 
         check_props = ['IK_follow', 'root/parent', 'FK_limb_follow', 'IK_Stretch']
 
@@ -88,6 +90,8 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
                 show_upgrade_face = True
             elif b.rigify_type == 'game.faces.super_face':
                 show_upgrade_game_face = True
+            elif b.rigify_type in outdated_game_types.keys():
+                show_upgrade_game_types = True
 
         if show_warning:
             layout.label(text=WARNING, icon='ERROR')
@@ -104,12 +108,13 @@ class VIEW3D_PT_gamerig(bpy.types.Panel):
         elif show_upgrade_face:
             layout.label(text="This metarig uses the old face rig.", icon='INFO')
             layout.operator("pose.rigify_upgrade_face")
-        elif show_upgrade_game_face:
+        
+        if show_upgrade_game_face:
             layout.label(text="This metarig uses the old game face rig.", icon='INFO')
             layout.operator("pose.gamerig_upgrade_game_face")
-
-
-
+        if show_upgrade_game_types:
+            layout.label(text="This metarig uses the old game types.", icon='ERROR')
+            layout.operator("pose.gamerig_upgrade_types")
 
         armature_id_store = C.object.data
 
