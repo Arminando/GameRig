@@ -110,6 +110,6 @@ def create_sample(obj):
     bones = orig_create_sample(obj)
 
     pbone = obj.pose.bones[bones['Bone']]
-    pbone.rigify_type = 'game.super_copy'
+    pbone.rigify_type = 'game.basic.super_copy'
 
     return bones

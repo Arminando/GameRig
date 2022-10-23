@@ -98,6 +98,6 @@ def create_sample(obj):
     bones = orig_create_sample(obj)
 
     pbone = obj.pose.bones[bones['pivot']]
-    pbone.rigify_type = 'game.pivot'
+    pbone.rigify_type = 'game.basic.pivot'
 
     return bones

@@ -17,6 +17,6 @@ def create_sample(obj):
     bones = orig_create_sample(obj)
 
     pbone = obj.pose.bones[bones['spine']]
-    pbone.rigify_type = 'game.basic_spine'
+    pbone.rigify_type = 'game.spines.basic_spine'
 
     return bones

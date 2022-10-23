@@ -93,7 +93,7 @@ def create_sample(obj):
     bones = orig_create_sample(obj)
 
     pbone = obj.pose.bones[bones['bone.01']]
-    pbone.rigify_type = 'game.copy_chain'
+    pbone.rigify_type = 'game.basic.copy_chain'
 
     obj.data.edit_bones[bones['bone.02']].roll = 0.0
     obj.data.edit_bones[bones['bone.03']].roll = 0.0
