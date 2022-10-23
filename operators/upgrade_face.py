@@ -42,17 +42,7 @@ def process_all(process, name_map):
 
     process('ear.L', layer=0, rig='game.basic.super_copy', params={'super_copy_widget_type': 'sphere'})
 
-    process('ear.L.001', parent='ear.L', rig='game.skin.basic_chain', connect_ends=True)
-    process('ear.L.002', parent='ear.L', rig='game.skin.stretchy_chain', connect_ends=True)
-    process('ear.L.003')
-    process('ear.L.004', parent='ear.L', rig='game.skin.basic_chain', connect_ends=True)
-
     process('ear.R', layer=0, rig='game.basic.super_copy', params={'super_copy_widget_type': 'sphere'})
-
-    process('ear.R.001', parent='ear.R', rig='game.skin.basic_chain', connect_ends=True)
-    process('ear.R.002', parent='ear.R', rig='game.skin.stretchy_chain', connect_ends=True)
-    process('ear.R.003')
-    process('ear.R.004', parent='ear.R', rig='game.skin.basic_chain', connect_ends=True)
 
     process('lip.T.R', parent='jaw_master', layer=1, rig='game.skin.stretchy_chain', sharpen=(0, 90),
             falloff=(0.7, 1, 0.1), spherical=(True, False, True), scale=True)
@@ -209,8 +199,8 @@ def make_new_bones(obj, name_map):
             ebone.roll -= angle
             prev_mat = ebone.matrix
 
-    align_bones(['ear.L', 'ear.L.001', 'ear.L.002', 'ear.L.003', 'ear.L.004'])
-    align_bones(['ear.R', 'ear.R.001', 'ear.R.002', 'ear.R.003', 'ear.R.004'])
+    align_bones(['ear.L'])
+    align_bones(['ear.R'])
 
     align_bones(['cheek.B.L', 'cheek.B.L.001', 'brow.T.L',
                  'brow.T.L.001', 'brow.T.L.002', 'brow.T.L.003'])
