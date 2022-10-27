@@ -17,7 +17,7 @@ outdated_types = {"game.arm" : "game.limbs.arm",
                     "game.super_head" : "game.spines.super_head",
                     "game.super_limb" : "game.limbs.super_limb",
                     "game.super_spine" : "game.spines.super_spine",
-                    "game.super_palm" : "super_palm"}
+                    "game.super_palm" : "game.limbs.super_palm"}
 
 
 class POSE_OT_gamerig_upgrade_gamerig_types(bpy.types.Operator):
