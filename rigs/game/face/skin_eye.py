@@ -22,6 +22,12 @@ class Rig(BaseSkinRig, skin_eye):
 
             self.clean_def_hierarchy(deform.eye)
 
+    @stage.rig_bones
+    def rig_deform_chain(self):
+        super().rig_deform_chain()
+        self.make_constraint(self.bones.deform.eye, 'COPY_LOCATION', self.bones.mch.master)
+        self.make_constraint(self.bones.deform.eye, 'COPY_ROTATION', self.bones.mch.master)
+
 
 def create_sample(obj):
     bones = old_create_sample(obj)
