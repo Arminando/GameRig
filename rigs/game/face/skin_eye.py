@@ -25,8 +25,9 @@ class Rig(BaseSkinRig, skin_eye):
     @stage.rig_bones
     def rig_deform_chain(self):
         super().rig_deform_chain()
-        self.make_constraint(self.bones.deform.eye, 'COPY_LOCATION', self.bones.mch.master)
-        self.make_constraint(self.bones.deform.eye, 'COPY_ROTATION', self.bones.mch.master)
+        if hasattr(self.bones.deform, 'eye'):
+            self.make_constraint(self.bones.deform.eye, 'COPY_LOCATION', self.bones.mch.master)
+            self.make_constraint(self.bones.deform.eye, 'COPY_ROTATION', self.bones.mch.master)
 
 
 def create_sample(obj):
