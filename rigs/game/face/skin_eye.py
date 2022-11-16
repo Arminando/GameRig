@@ -12,8 +12,8 @@ class Rig(BaseSkinRig, skin_eye):
     @stage.parent_bones
     def parent_deform_chain(self):
         deform = self.bones.deform
-        self.set_bone_parent(deform.master, self.bones.org)
-
+        self.set_bone_parent(deform.master, self.bones.mch.master)
+        
         self.clean_def_hierarchy(deform.master)
 
         if self.params.make_deform:
