@@ -2,7 +2,7 @@ import bpy
 
 outdated_types = {"game.arm" : "game.limbs.arm",
                     "game.basic_spine" : "game.spines.basic_spine",
-                    "game.basic_tail" : "game.spines.tail",
+                    "game.basic_tail" : "game.spines.basic_tail",
                     "game.copy_chain" : "game.basic.copy_chain",
                     "game.front_paw" : "game.limbs.front_paw",
                     "game.leg" : "game.limbs.leg",
