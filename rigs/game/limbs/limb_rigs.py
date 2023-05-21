@@ -22,7 +22,7 @@ class BaseLimbRig(BoneUtilityMixin, old_BaseLimbRig):
 
         # This puts the deformation bones into the def hierarchy of its parent rig
         self.clean_def_hierarchy(self.bones.deform[0])
-        
+
         # Create leaf hierarchy
         if self.leaf_hierarchy:
             limb_segments = []
@@ -72,7 +72,6 @@ class BaseLimbRig(BoneUtilityMixin, old_BaseLimbRig):
     @stage.configure_bones
     def set_control_orientations(self):
         self.remove_quat_rot_mode(self.bones.ctrl)
-
 
     ##############################
     # Parameter UI

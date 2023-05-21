@@ -43,4 +43,4 @@ def unregister():
     
     from bpy.utils import unregister_class
     for m in reversed(modules):
-        m.unregister
+        m.unregister()
