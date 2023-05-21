@@ -3,7 +3,7 @@ import addon_utils
 
 from rigify import rig_lists
 from rigify.utils.errors import MetarigError
-from rigify.utils.rig import upgradeMetarigTypes, outdated_types
+from rigify.utils.rig import outdated_types
 from rigify.ui import build_type_list
 from rigify import feature_set_list
 from rigify.ui import DATA_PT_rigify_advanced, DATA_PT_rigify_samples
