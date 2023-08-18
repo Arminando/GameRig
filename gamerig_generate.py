@@ -18,23 +18,31 @@ class Generator_gamerig(Generator):
 
     # Added this just to make game.raw_copy work, which is identical to raw_copy
     def _Generator__rename_org_bones(self, obj):
-        #----------------------------------
-        # Make a list of the original bones so we can keep track of them.
+        # Make a list of the original bones, so we can keep track of them.
         original_bones = [bone.name for bone in obj.data.bones]
 
         # Add the ORG_PREFIX to the original bones.
         for i in range(0, len(original_bones)):
             bone = obj.pose.bones[original_bones[i]]
 
+            # Preserve the root bone as is if present
+            if bone.name == ROOT_NAME:
+                if bone.parent:
+                    raise MetarigError('Root bone must have no parent')
+                if get_rigify_type(bone) not in ('', 'basic.raw_copy'):
+                    raise MetarigError('Root bone must have no rig, or use basic.raw_copy')
+                continue
+
             # This rig type is special in that it preserves the name of the bone.
-            if get_rigify_type(bone) not in ('basic.raw_copy', 'game.raw_copy'):
+            if get_rigify_type(bone) not in ('basic.raw_copy', 'game.basic.raw_copy'):
+
                 bone.name = make_original_name(original_bones[i])
                 original_bones[i] = bone.name
 
         self.original_bones = original_bones
 
     
-    def  _Generator__create_root_bone(self):
+    def _Generator__create_root_bone(self):
         obj = self.obj
         metarig = self.metarig
 
@@ -55,7 +63,16 @@ class Generator_gamerig(Generator):
         obj.pose.bones[root_bone].rotation_mode = 'XYZ'
         bpy.ops.object.mode_set(mode='EDIT')
 
+    def _Generator__lock_transforms(self):
+        super()._Generator__lock_transforms()
 
+        # Unlock on DEF- bones
+        for pb in self.obj.pose.bones:
+            if "DEF-" in pb.name:
+                pb.lock_location = (False, False, False)
+                pb.lock_rotation = (False, False, False)
+                pb.lock_rotation_w = False
+                pb.lock_scale = (False, False, False)
 
         
 # Part of the execute function for the class below
