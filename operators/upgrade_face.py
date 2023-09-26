@@ -10,7 +10,8 @@ from rigify.utils.errors import MetarigError
 from rigify.utils.bones import align_bone_roll
 from rigify.utils.rig import get_rigify_type
 from rigify.utils.node_merger import NodeMerger
-
+from rigify.utils.layers import ControlLayersOption, set_bone_layers, union_layer_lists
+from rigify.operators.upgrade_face import check_bone, parent_bone, set_layers, connect_ends_map
 
 def find_face_bone(obj):
     pbone = obj.pose.bones.get('face')
@@ -259,43 +260,6 @@ def make_new_bones(obj, name_map):
     bridge('chin_end_glue.001', 'chin.001', 'tail', 'lip.B.L', 'head', roll=45)
 
 
-def check_bone(obj, name_map, bone, **kwargs):
-    bone = name_map.get(bone, bone)
-    if bone not in obj.pose.bones:
-        raise MetarigError("Bone '%s' not found" % (bone))
-
-
-def parent_bone(obj, name_map, bone, parent=None, connect=False, **kwargs):
-    if parent is not None:
-        bone = name_map.get(bone, bone)
-        parent = name_map.get(parent, parent)
-
-        ebone = obj.data.edit_bones[bone]
-        ebone.use_connect = connect
-        ebone.parent = obj.data.edit_bones[parent]
-
-
-def set_layers(obj, name_map, layer_table, bone, layer=2, pri_layer=None, sec_layer=None, **kwargs):
-    bone = name_map.get(bone, bone)
-    pbone = obj.pose.bones[bone]
-    pbone.bone.layers = layer_table[layer]
-
-    if pri_layer:
-        pbone.rigify_parameters.skin_primary_layers_extra = True
-        pbone.rigify_parameters.skin_primary_layers = layer_table[pri_layer]
-
-    if sec_layer:
-        pbone.rigify_parameters.skin_secondary_layers_extra = True
-        pbone.rigify_parameters.skin_secondary_layers = layer_table[sec_layer]
-
-
-connect_ends_map = {
-    'prev': (True, False),
-    'next': (False, True),
-    True: (True, True),
-}
-
-
 def set_rig(
     obj, name_map, bone, rig=None,
     connect_ends=None, priority=0, middle=0, sharpen=None,
@@ -358,17 +322,10 @@ def update_face_rig(obj):
 
     # Find the layer settings
     face_pbone = obj.pose.bones[face_bone]
-    main_layers = list(face_pbone.bone.layers)
+    main_layers = list(face_pbone.bone.collections)
 
-    if face_pbone.rigify_parameters.primary_layers_extra:
-        primary_layers = face_pbone.rigify_parameters.primary_layers
-    else:
-        primary_layers = main_layers
-
-    if face_pbone.rigify_parameters.secondary_layers_extra:
-        secondary_layers = face_pbone.rigify_parameters.secondary_layers
-    else:
-        secondary_layers = main_layers
+    primary_layers = ControlLayersOption.FACE_PRIMARY.get(face_pbone.rigify_parameters) or main_layers
+    secondary_layers = ControlLayersOption.FACE_SECONDARY.get(face_pbone.rigify_parameters) or main_layers
 
     # Edit mode changes
     bpy.ops.object.mode_set(mode='EDIT')
