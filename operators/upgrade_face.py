@@ -370,7 +370,6 @@ class POSE_OT_gamerig_upgrade_game_face(bpy.types.Operator):
         return context.window_manager.invoke_confirm(self, event)
 
     def execute(self, context):
-        print("GAME THING PRINT!!!!!")
         mode = context.object.mode
         update_face_rig(context.object)
         bpy.ops.object.mode_set(mode=mode)
