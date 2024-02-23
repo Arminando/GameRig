@@ -348,9 +348,8 @@ def update_face_rig(obj):
     process_all(partial(set_rig, obj, name_map), name_map)
     process_all(partial(set_layers, obj, name_map, layer_table), name_map)
 
-    for i, v in enumerate(layer_table['*']):
-        if v:
-            obj.data.layers[i] = True
+    for bcoll in layer_table['*']:
+        bcoll.is_visible = True
 
 
 class POSE_OT_gamerig_upgrade_game_face(bpy.types.Operator):
