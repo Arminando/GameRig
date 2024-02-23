@@ -54,6 +54,3 @@ The current version has been developed for use with Blender 2.92. Other versions
 > * Create a system for corrective bone behavior to enable better deformations
 > * Provide the means to quickly rig assets from software like MetaHuman, Character Creator 3, Daz3D etc.
 > * And more to come
-
-> If you want to be help, join my ![Patreon](https://www.patreon.com/arminhalac) and support GameRig. There you will also find numerous tutorials that will teach you how to rig, paint weights and many other things.
-> 
