@@ -104,7 +104,7 @@ def register():
 def unregister():
     from bpy.utils import unregister_class
 
-    bpy.types.DATA_PT_rigify_buttons.remove(draw_gamerig_rigify_button)
+    bpy.types.DATA_PT_rigify.remove(draw_gamerig_rigify_button)
 
     # Classes.
     for c in classes:
