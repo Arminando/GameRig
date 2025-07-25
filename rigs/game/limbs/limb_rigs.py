@@ -107,7 +107,7 @@ class BaseLimbRig(BoneUtilityMixin, old_BaseLimbRig):
         )
         params.leaf_hierarchy = bpy.props.BoolProperty(
             name="Leaf Hierarchy",
-            default=False,
+            default=True,
             description="False means limb segments and tweak bones will create a single chain. True means limb segments will be parented to each other directly and the tweak bones will be parented to their respective segment."
         )
 

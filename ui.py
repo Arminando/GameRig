@@ -77,6 +77,9 @@ class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
         layout.use_property_split = True
         layout.use_property_decorate = False
 
+        layout.operator("pose.gamerig_make_game_ready", text="Make GameRig Ready", icon='CHECKMARK')
+        layout.separator()
+
         layout.prop(armature_id_store, "gameRig_force_generator", text="Force Generator", expand=True)
         layout.separator()
 
