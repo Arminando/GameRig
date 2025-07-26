@@ -14,7 +14,7 @@ def draw_gamerig_rigify_button(self, context):
     obj = verify_armature_obj(C.object)
 
 
-    if not is_gamerig_metarig(context.object) or obj.mode=='EDIT':
+    if not is_gamerig_metarig(context.object):
         return
         
     layout.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')

@@ -1,6 +1,5 @@
 import bpy
 
-from ..base_rig import BaseRig
 from ..utils.bones import BoneUtilityMixin
 
 from rigify.base_rig import stage
