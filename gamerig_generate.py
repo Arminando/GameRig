@@ -137,10 +137,11 @@ class GAMERIG_OT_generate(bpy.types.Operator):
             if bone.rigify_type == "":
                 continue
 
-            if "game" not in bone.rigify_type and "game." + bone.rigify_type in rigs_list:
-                bone.rigify_type = "game." + bone.rigify_type
-            else:
-                print("GameRig: Bone", bone.name, bone.rigify_type, "could not convert to GameRig type.")
+            if "game" not in bone.rigify_type:
+                if "game." + bone.rigify_type in rigs_list:
+                    bone.rigify_type = "game." + bone.rigify_type
+                else:
+                    print("GameRig: Bone", bone.name, bone.rigify_type, "could not convert to GameRig type.")
 
 
 classes = [
