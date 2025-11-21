@@ -6,6 +6,8 @@ from rigify.utils.rig import get_rigify_type
 from rigify.utils.naming import make_original_name, ROOT_NAME
 from rigify.ui import rigify_report_exception
 from rigify.utils.errors import MetarigError
+from rigify.rig_lists import get_rigs
+from rigify.rig_lists import rigs
 
 
 class Generator_gamerig(Generator):
@@ -109,6 +111,9 @@ class GAMERIG_OT_generate(bpy.types.Operator):
     bl_description = 'Generates a rig from the active metarig armature'
 
     def execute(self, context):
+
+        self.make_game_ready(context)
+
         try:
             generate_rig(context, context.object)
         except MetarigError as rig_exception:
@@ -125,6 +130,17 @@ class GAMERIG_OT_generate(bpy.types.Operator):
             bpy.ops.object.mode_set(mode='OBJECT')
 
         return {'FINISHED'}
+    
+    def make_game_ready(self, context):
+        rigs_list = list(rigs.keys())
+        for bone in context.object.pose.bones:
+            if bone.rigify_type == "":
+                continue
+
+            if "game" not in bone.rigify_type and "game." + bone.rigify_type in rigs_list:
+                bone.rigify_type = "game." + bone.rigify_type
+            else:
+                print("GameRig: Bone", bone.name, bone.rigify_type, "could not convert to GameRig type.")
 
 
 classes = [

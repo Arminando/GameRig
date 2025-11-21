@@ -14,8 +14,8 @@ def draw_gamerig_rigify_button(self, context):
     obj = verify_armature_obj(C.object)
 
 
-    if not is_gamerig_metarig(context.object):
-        return
+    # if not is_gamerig_metarig(context.object):
+    #     return
         
     layout.operator("pose.gamerig_generate", text="Generate GameRig", icon='GHOST_ENABLED')
 
@@ -54,42 +54,11 @@ def draw_gamerig_rigify_button(self, context):
         layout.label(text="Non Game types detected", icon='ERROR')
 
 
-class VIEW3D_PT_gamerig_preferences(bpy.types.Panel):
-    bl_label = "Game Rig Preferences"
-    bl_space_type = 'PROPERTIES'
-    bl_region_type = 'WINDOW'
-    bl_context = "data"
-    bl_parent_id = 'DATA_PT_rigify'
-    bl_options = {'DEFAULT_CLOSED'}
-    @classmethod
-    def poll(cls, context):
-        if not context.object:
-            return False
-        return context.object.type == 'ARMATURE' and context.active_object.data.get("rig_id") is None
 
-    def draw(self, context):
-        C = context
-        armature_id_store = C.object.data
-        id_store = C.window_manager
-
-
-        layout = self.layout
-        layout.use_property_split = True
-        layout.use_property_decorate = False
-
-        layout.operator("pose.gamerig_make_game_ready", text="Make GameRig Ready", icon='CHECKMARK')
-        layout.separator()
-
-        layout.prop(armature_id_store, "gameRig_force_generator", text="Force Generator", expand=True)
-        layout.separator()
-
-        split = layout.row().split(factor=0.4)
-        split.label(text='')
-        split.operator("script.reload", text="Reload Scripts", icon='FILE_REFRESH')
         
 
 classes = [
-    VIEW3D_PT_gamerig_preferences,
+    
 ]
 
 
@@ -102,7 +71,6 @@ def register():
     for c in classes:
         register_class(c)
 
-    
 
 def unregister():
     from bpy.utils import unregister_class

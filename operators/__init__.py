@@ -7,7 +7,6 @@ import importlib
 submodules = (
     'upgrade_face',
     'upgrade_metarig_types',
-    'make_game_ready',
 )
 
 loaded_submodules = []
