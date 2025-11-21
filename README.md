@@ -2,7 +2,8 @@
 
 GameRig is an auto rigging for games addon for Blender.
 It is a so called feature set made for creating game engine compatible rigs using a workflow built on top of the Rigify system.
-The current version has been developed for use with Blender 2.92. Other versions might be compatible as well, this needs further testing. Will soon made sure it works with 2.93.
+The current version has been developed for use with Blender 4.5.4 LTS and 5.0. Other versions might be compatible as well, this needs further testing.
+Whenever Rigify updates, and it often does, it has potential to break GameRig so maintaining this extension is a constant effort. I will do my best to keep it working with the latest versions.
 
 
 > ## Differences between GameRig and Rigify
@@ -31,26 +32,6 @@ The current version has been developed for use with Blender 2.92. Other versions
 
 > ## Usage instructions
 > 
-> Exactly the same as regular rigify but make sure to only use the rigs that have the "game." prefix.
-
-> ## UI
-> 
-> In version 0.0.3 a new UI has been added to the 3D view side panel.
-> Some general notes about the UI:
-> * You always have access to the Bone Groups and Layer Names panels
-> * The GameRig panel is available only in Object and Pose modes. This is where you will be triggering the rig build from
-> * The Rig Element panel will show up only in Pose mode and when you have a Bone selected that Rig Type assigned
-> * To add rig samples, you need to switch into Edit mode and the GameRig panel will change to provide you with the rig samples list
-> 
-> ![UI showcase](images/ui_showcase.gif)
-
-> ## The future
->
-> The first stage for GameRig was to take what is already in Rigify and make a game friendly version of it. That part is done and I can focus on making this into a fully featured and more flexible tool.
-> Some of the things I will be working on next:
-> * Add rig types that are missing. Things like sliders, better face components etc.
-> * Provide a better space switching solution
-> * Add option for custom pre and post build scripts
-> * Create a system for corrective bone behavior to enable better deformations
-> * Provide the means to quickly rig assets from software like MetaHuman, Character Creator 3, Daz3D etc.
-> * And more to come
+> Exactly the same as regular rigify but make sure to only use the rig types that have the "game." prefix.
+> With v2.0, GameRig automatically converts the regular rig types to game rig types. Just make your rig the usual rigify way but press the Generate GameRig button instead of Generate Rig.
+> This will change the rig types to their game rig equivalents so when you continue editing your metarig you can adjust the game rig specific type properties.
