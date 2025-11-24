@@ -10,16 +10,7 @@ class Rig(BoneUtilityMixin, raw_copy):
         super().parent_bones()
         bone_name = self.bones.org
         if "DEF-" in bone_name:
-            # self.clean_def_hierarchy(self.bones.org)
-            old_parent = self.get_bone_parent(bone_name)
-            if old_parent:
-                target = self.find_derived_def_target(old_parent)
-                if target:
-                    self.set_bone_parent(bone_name, target)
-                else:
-                    self.generator.disable_auto_parent(bone_name)
-            else:
-                self.generator.disable_auto_parent(bone_name)
+            self.clean_def_hierarchy(self.bones.org)
 
 def create_sample(obj):
     """ Create a sample metarig for this rig type.
