@@ -8,7 +8,8 @@ class Rig(BoneUtilityMixin, raw_copy):
 
     def parent_bones(self):
         super().parent_bones()
-        if "DEF-" in self.bones.org:
+        bone_name = self.bones.org
+        if "DEF-" in bone_name:
             self.clean_def_hierarchy(self.bones.org)
 
 def create_sample(obj):

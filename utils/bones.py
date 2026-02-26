@@ -13,7 +13,7 @@ class BoneUtilityMixin(old_BoneUtilityMixin):
             if target:
                 self.set_bone_parent(bone_name, target)
             else:
-                self.remove_bone_parent(bone_name)
+                # self.remove_bone_parent(bone_name)
                 self.generator.disable_auto_parent(bone_name)
         else:
             self.generator.disable_auto_parent(bone_name)
